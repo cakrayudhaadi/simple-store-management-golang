@@ -1,0 +1,22 @@
+{
+    "name":"",
+    "app": {
+        "mode": "dev",
+        "base_url": "localhost",
+        "port": "8080"
+    },
+    "migration": {
+        "db": {
+            "postgres": {
+                "db_url": "postgresql://%s:%s@%s:%d/%s",
+                "db_host": "localhost",
+                "db_port": "5432",
+                "db_user": "postgres",
+                "db_password": "postgres",
+                "db_name": "sanbercode_golang",
+                "db_engine": "postgres"
+            }
+        }
+    },
+    "jwt_secret_key": "691aa3db165271c0ee1bea2378f5dbbcc986ec097524dd5ed875dbb8df162945"
+}
