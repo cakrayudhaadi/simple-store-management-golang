@@ -23,75 +23,75 @@ func itemInitiator(router *gin.Engine) {
 
 func CreateItem(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewItemRepository(connection.DBConnections)
-		categorySrv  = services.NewItemService(categoryRepo)
+		itemRepo = repositories.NewItemRepository(connection.DBConnections)
+		itemSrv  = services.NewItemService(itemRepo)
 	)
 
-	err := categorySrv.CreateItem(ctx)
+	err := itemSrv.CreateItem(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item berhasil dibuat")
 }
 
 func GetAllItems(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewItemRepository(connection.DBConnections)
-		categorySrv  = services.NewItemService(categoryRepo)
+		itemRepo = repositories.NewItemRepository(connection.DBConnections)
+		itemSrv  = services.NewItemService(itemRepo)
 	)
 
-	books, err := categorySrv.GetAllItem(ctx)
+	items, err := itemSrv.GetAllItem(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data books berhasil diambil", books)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data items berhasil diambil", items)
 }
 
 func GetItem(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewItemRepository(connection.DBConnections)
-		categorySrv  = services.NewItemService(categoryRepo)
+		itemRepo = repositories.NewItemRepository(connection.DBConnections)
+		itemSrv  = services.NewItemService(itemRepo)
 	)
 
-	book, err := categorySrv.GetItem(ctx)
+	item, err := itemSrv.GetItem(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data book berhasil diambil", book)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data item berhasil diambil", item)
 }
 
 func UpdateItem(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewItemRepository(connection.DBConnections)
-		categorySrv  = services.NewItemService(categoryRepo)
+		itemRepo = repositories.NewItemRepository(connection.DBConnections)
+		itemSrv  = services.NewItemService(itemRepo)
 	)
 
-	err := categorySrv.UpdateItem(ctx)
+	err := itemSrv.UpdateItem(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item berhasil diubah")
 }
 
 func DeleteItem(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewItemRepository(connection.DBConnections)
-		categorySrv  = services.NewItemService(categoryRepo)
+		itemRepo = repositories.NewItemRepository(connection.DBConnections)
+		itemSrv  = services.NewItemService(itemRepo)
 	)
 
-	err := categorySrv.DeleteItem(ctx)
+	err := itemSrv.DeleteItem(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item berhasil dihapus")
 }

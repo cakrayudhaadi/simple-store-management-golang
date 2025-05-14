@@ -17,6 +17,9 @@ type BranchService interface {
 	GetBranch(ctx *gin.Context) (branch models.Branch, err error)
 	UpdateBranch(ctx *gin.Context) (err error)
 	DeleteBranch(ctx *gin.Context) (err error)
+	GetBranchWithEmployees(ctx *gin.Context) (branch models.EmployeesOfBranchResponse, err error)
+	GetBranchWithItems(ctx *gin.Context) (branch models.ItemsOfBranchResponse, err error)
+	GetTopBranch(ctx *gin.Context) (branch models.TopBranchResponse, err error)
 }
 
 type branchService struct {
@@ -141,5 +144,17 @@ func validateBranchReqAndConvertToBranch(ctx *gin.Context) (branchs models.Branc
 	}
 	branchs = branchsRequest.ConvertToBranch()
 
+	return
+}
+
+func (service *branchService) GetBranchWithEmployees(ctx *gin.Context) (branch models.EmployeesOfBranchResponse, err error) {
+	return
+}
+
+func (service *branchService) GetBranchWithItems(ctx *gin.Context) (branch models.ItemsOfBranchResponse, err error) {
+	return
+}
+
+func (service *branchService) GetTopBranch(ctx *gin.Context) (branch models.TopBranchResponse, err error) {
 	return
 }

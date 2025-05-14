@@ -25,6 +25,11 @@ type EmployeeOnBranchResponse struct {
 	Name string `json:"name"`
 }
 
+type TopEmployeeRequest struct {
+	BranchID int    `json:"branch_id"`
+	Periode  string `json:"name"`
+}
+
 type TopEmployeeResponse struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`

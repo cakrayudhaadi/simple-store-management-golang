@@ -4,6 +4,7 @@ import (
 	"simple-store-management/configs"
 	"simple-store-management/databases/connection"
 	"simple-store-management/databases/migration"
+	"simple-store-management/routers"
 
 	_ "github.com/lib/pq"
 )
@@ -13,4 +14,5 @@ func main() {
 	connection.Initiator()
 	defer connection.SqlDBConnections.Close()
 	migration.Initiator(connection.SqlDBConnections)
+	routers.StartServer()
 }

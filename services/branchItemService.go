@@ -17,6 +17,8 @@ type BranchItemService interface {
 	GetBranchItem(ctx *gin.Context) (branchItems models.BranchItem, err error)
 	UpdateBranchItem(ctx *gin.Context) (err error)
 	DeleteBranchItem(ctx *gin.Context) (err error)
+	AddItemStock(ctx *gin.Context) (err error)
+	RemoveItemStock(ctx *gin.Context) (err error)
 }
 
 type branchItemService struct {
@@ -159,5 +161,13 @@ func validateRemoveBranchItemReqAndConvertToBranchItem(ctx *gin.Context) (branch
 	}
 	branchItems = branchItemsRequest.ConvertToBranchItem()
 
+	return
+}
+
+func (service *branchItemService) AddItemStock(ctx *gin.Context) (err error) {
+	return
+}
+
+func (service *branchItemService) RemoveItemStock(ctx *gin.Context) (err error) {
 	return
 }

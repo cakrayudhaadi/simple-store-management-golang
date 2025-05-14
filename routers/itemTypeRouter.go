@@ -23,75 +23,75 @@ func itemTypeInitiator(router *gin.Engine) {
 
 func CreateItemType(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewItemTypeRepository(connection.DBConnections)
-		categorySrv  = services.NewItemTypeService(categoryRepo)
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemTypeSrv  = services.NewItemTypeService(itemTypeRepo)
 	)
 
-	err := categorySrv.CreateItemType(ctx)
+	err := itemTypeSrv.CreateItemType(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data itemType berhasil dibuat")
 }
 
 func GetAllItemTypes(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewItemTypeRepository(connection.DBConnections)
-		categorySrv  = services.NewItemTypeService(categoryRepo)
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemTypeSrv  = services.NewItemTypeService(itemTypeRepo)
 	)
 
-	books, err := categorySrv.GetAllItemType(ctx)
+	itemTypes, err := itemTypeSrv.GetAllItemType(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data books berhasil diambil", books)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data itemTypes berhasil diambil", itemTypes)
 }
 
 func GetItemType(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewItemTypeRepository(connection.DBConnections)
-		categorySrv  = services.NewItemTypeService(categoryRepo)
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemTypeSrv  = services.NewItemTypeService(itemTypeRepo)
 	)
 
-	book, err := categorySrv.GetItemType(ctx)
+	itemType, err := itemTypeSrv.GetItemType(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data book berhasil diambil", book)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data itemType berhasil diambil", itemType)
 }
 
 func UpdateItemType(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewItemTypeRepository(connection.DBConnections)
-		categorySrv  = services.NewItemTypeService(categoryRepo)
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemTypeSrv  = services.NewItemTypeService(itemTypeRepo)
 	)
 
-	err := categorySrv.UpdateItemType(ctx)
+	err := itemTypeSrv.UpdateItemType(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data itemType berhasil diubah")
 }
 
 func DeleteItemType(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewItemTypeRepository(connection.DBConnections)
-		categorySrv  = services.NewItemTypeService(categoryRepo)
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemTypeSrv  = services.NewItemTypeService(itemTypeRepo)
 	)
 
-	err := categorySrv.DeleteItemType(ctx)
+	err := itemTypeSrv.DeleteItemType(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data itemType berhasil dihapus")
 }

@@ -40,6 +40,10 @@ type ItemsOfBranchResponse struct {
 	Items   []ItemsOnBranchResponse `json:"items"`
 }
 
+type TopBranchRequest struct {
+	Periode string `json:"name"`
+}
+
 type TopBranchResponse struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`

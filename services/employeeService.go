@@ -17,6 +17,7 @@ type EmployeeService interface {
 	GetEmployee(ctx *gin.Context) (employee models.Employee, err error)
 	UpdateEmployee(ctx *gin.Context) (err error)
 	DeleteEmployee(ctx *gin.Context) (err error)
+	GetTopEmployee(ctx *gin.Context) (employee models.TopEmployeeResponse, err error)
 }
 
 type employeeService struct {
@@ -141,5 +142,9 @@ func validateEmployeeReqAndConvertToEmployee(ctx *gin.Context) (employees models
 	}
 	employees = employeesRequest.ConvertToEmployee()
 
+	return
+}
+
+func (service *employeeService) GetTopEmployee(ctx *gin.Context) (employee models.TopEmployeeResponse, err error) {
 	return
 }

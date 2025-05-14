@@ -18,80 +18,112 @@ func branchItemInitiator(router *gin.Engine) {
 		api.GET("/:id", GetBranchItem)
 		api.PUT("/:id", UpdateBranchItem)
 		api.DELETE("/:id", DeleteBranchItem)
+		api.PUT("/add", AddItemStock)
+		api.PUT("/remove", RemoveItemStock)
 	}
 }
 
 func CreateBranchItem(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		categorySrv  = services.NewBranchItemService(categoryRepo)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
 	)
 
-	err := categorySrv.CreateBranchItem(ctx)
+	err := branchItemSrv.CreateBranchItem(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil dibuat")
 }
 
 func GetAllBranchItems(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		categorySrv  = services.NewBranchItemService(categoryRepo)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
 	)
 
-	books, err := categorySrv.GetAllBranchItem(ctx)
+	branchItems, err := branchItemSrv.GetAllBranchItem(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data books berhasil diambil", books)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branchItems berhasil diambil", branchItems)
 }
 
 func GetBranchItem(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		categorySrv  = services.NewBranchItemService(categoryRepo)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
 	)
 
-	book, err := categorySrv.GetBranchItem(ctx)
+	branchItem, err := branchItemSrv.GetBranchItem(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data book berhasil diambil", book)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branchItem berhasil diambil", branchItem)
 }
 
 func UpdateBranchItem(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		categorySrv  = services.NewBranchItemService(categoryRepo)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
 	)
 
-	err := categorySrv.UpdateBranchItem(ctx)
+	err := branchItemSrv.UpdateBranchItem(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil diubah")
 }
 
 func DeleteBranchItem(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		categorySrv  = services.NewBranchItemService(categoryRepo)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
 	)
 
-	err := categorySrv.DeleteBranchItem(ctx)
+	err := branchItemSrv.DeleteBranchItem(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil dihapus")
+}
+
+func AddItemStock(ctx *gin.Context) {
+	var (
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
+	)
+
+	err := branchItemSrv.AddItemStock(ctx)
+	if err != nil {
+		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil diubah")
+}
+
+func RemoveItemStock(ctx *gin.Context) {
+	var (
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
+	)
+
+	err := branchItemSrv.RemoveItemStock(ctx)
+	if err != nil {
+		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil diubah")
 }

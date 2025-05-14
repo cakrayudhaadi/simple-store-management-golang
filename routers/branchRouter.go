@@ -18,80 +18,128 @@ func branchInitiator(router *gin.Engine) {
 		api.GET("/:id", GetBranch)
 		api.PUT("/:id", UpdateBranch)
 		api.DELETE("/:id", DeleteBranch)
+		api.GET("/employees", GetBranchWithEmployees)
+		api.GET("/items", GetBranchWithItems)
+		api.GET("/top", GetTopBranch)
 	}
 }
 
 func CreateBranch(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewBranchRepository(connection.DBConnections)
-		categorySrv  = services.NewBranchService(categoryRepo)
+		branchRepo = repositories.NewBranchRepository(connection.DBConnections)
+		branchSrv  = services.NewBranchService(branchRepo)
 	)
 
-	err := categorySrv.CreateBranch(ctx)
+	err := branchSrv.CreateBranch(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branch berhasil dibuat")
 }
 
 func GetAllBranchs(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewBranchRepository(connection.DBConnections)
-		categorySrv  = services.NewBranchService(categoryRepo)
+		branchRepo = repositories.NewBranchRepository(connection.DBConnections)
+		branchSrv  = services.NewBranchService(branchRepo)
 	)
 
-	books, err := categorySrv.GetAllBranch(ctx)
+	branchs, err := branchSrv.GetAllBranch(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data books berhasil diambil", books)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branchs berhasil diambil", branchs)
 }
 
 func GetBranch(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewBranchRepository(connection.DBConnections)
-		categorySrv  = services.NewBranchService(categoryRepo)
+		branchRepo = repositories.NewBranchRepository(connection.DBConnections)
+		branchSrv  = services.NewBranchService(branchRepo)
 	)
 
-	book, err := categorySrv.GetBranch(ctx)
+	branch, err := branchSrv.GetBranch(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data book berhasil diambil", book)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch berhasil diambil", branch)
 }
 
 func UpdateBranch(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewBranchRepository(connection.DBConnections)
-		categorySrv  = services.NewBranchService(categoryRepo)
+		branchRepo = repositories.NewBranchRepository(connection.DBConnections)
+		branchSrv  = services.NewBranchService(branchRepo)
 	)
 
-	err := categorySrv.UpdateBranch(ctx)
+	err := branchSrv.UpdateBranch(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branch berhasil diubah")
 }
 
 func DeleteBranch(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewBranchRepository(connection.DBConnections)
-		categorySrv  = services.NewBranchService(categoryRepo)
+		branchRepo = repositories.NewBranchRepository(connection.DBConnections)
+		branchSrv  = services.NewBranchService(branchRepo)
 	)
 
-	err := categorySrv.DeleteBranch(ctx)
+	err := branchSrv.DeleteBranch(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branch berhasil dihapus")
+}
+
+func GetBranchWithEmployees(ctx *gin.Context) {
+	var (
+		branchRepo = repositories.NewBranchRepository(connection.DBConnections)
+		branchSrv  = services.NewBranchService(branchRepo)
+	)
+
+	branch, err := branchSrv.GetBranchWithEmployees(ctx)
+	if err != nil {
+		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch berhasil diambil", branch)
+}
+
+func GetBranchWithItems(ctx *gin.Context) {
+	var (
+		branchRepo = repositories.NewBranchRepository(connection.DBConnections)
+		branchSrv  = services.NewBranchService(branchRepo)
+	)
+
+	branch, err := branchSrv.GetBranchWithItems(ctx)
+	if err != nil {
+		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch berhasil diambil", branch)
+}
+
+func GetTopBranch(ctx *gin.Context) {
+	var (
+		branchRepo = repositories.NewBranchRepository(connection.DBConnections)
+		branchSrv  = services.NewBranchService(branchRepo)
+	)
+
+	branch, err := branchSrv.GetTopBranch(ctx)
+	if err != nil {
+		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch berhasil diambil", branch)
 }

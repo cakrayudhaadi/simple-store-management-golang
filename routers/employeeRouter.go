@@ -18,80 +18,96 @@ func employeeInitiator(router *gin.Engine) {
 		api.GET("/:id", GetEmployee)
 		api.PUT("/:id", UpdateEmployee)
 		api.DELETE("/:id", DeleteEmployee)
+		api.GET("/:branchId/top", GetTopEmployee)
 	}
 }
 
 func CreateEmployee(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewEmployeeRepository(connection.DBConnections)
-		categorySrv  = services.NewEmployeeService(categoryRepo)
+		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
+		employeeSrv  = services.NewEmployeeService(employeeRepo)
 	)
 
-	err := categorySrv.CreateEmployee(ctx)
+	err := employeeSrv.CreateEmployee(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee berhasil dibuat")
 }
 
 func GetAllEmployees(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewEmployeeRepository(connection.DBConnections)
-		categorySrv  = services.NewEmployeeService(categoryRepo)
+		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
+		employeeSrv  = services.NewEmployeeService(employeeRepo)
 	)
 
-	books, err := categorySrv.GetAllEmployee(ctx)
+	employees, err := employeeSrv.GetAllEmployee(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data books berhasil diambil", books)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employees berhasil diambil", employees)
 }
 
 func GetEmployee(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewEmployeeRepository(connection.DBConnections)
-		categorySrv  = services.NewEmployeeService(categoryRepo)
+		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
+		employeeSrv  = services.NewEmployeeService(employeeRepo)
 	)
 
-	book, err := categorySrv.GetEmployee(ctx)
+	employee, err := employeeSrv.GetEmployee(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data book berhasil diambil", book)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employee berhasil diambil", employee)
 }
 
 func UpdateEmployee(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewEmployeeRepository(connection.DBConnections)
-		categorySrv  = services.NewEmployeeService(categoryRepo)
+		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
+		employeeSrv  = services.NewEmployeeService(employeeRepo)
 	)
 
-	err := categorySrv.UpdateEmployee(ctx)
+	err := employeeSrv.UpdateEmployee(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee berhasil diubah")
 }
 
 func DeleteEmployee(ctx *gin.Context) {
 	var (
-		categoryRepo = repositories.NewEmployeeRepository(connection.DBConnections)
-		categorySrv  = services.NewEmployeeService(categoryRepo)
+		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
+		employeeSrv  = services.NewEmployeeService(employeeRepo)
 	)
 
-	err := categorySrv.DeleteEmployee(ctx)
+	err := employeeSrv.DeleteEmployee(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data book berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee berhasil dihapus")
+}
+
+func GetTopEmployee(ctx *gin.Context) {
+	var (
+		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
+		employeeSrv  = services.NewEmployeeService(employeeRepo)
+	)
+
+	employee, err := employeeSrv.GetTopEmployee(ctx)
+	if err != nil {
+		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employee berhasil diambil", employee)
 }
