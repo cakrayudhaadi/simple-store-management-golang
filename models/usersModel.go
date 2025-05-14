@@ -49,7 +49,7 @@ func (s *SignUpRequest) Validate() (err error) {
 	return nil
 }
 
-func (l *LoginRequest) ValidateLogin() (err error) {
+func (l *LoginRequest) Validate() (err error) {
 	if commons.IsValueEmpty(l.Username) {
 		return errors.New("username harus diisi")
 	} else if commons.IsValueEmpty(l.Password) {

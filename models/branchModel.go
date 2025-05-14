@@ -56,3 +56,10 @@ func (b *BranchRequest) Validate() error {
 	}
 	return nil
 }
+
+func (b *BranchRequest) ConvertToBranch() Branch {
+	return Branch{
+		Name:    b.Name,
+		Address: b.Address,
+	}
+}

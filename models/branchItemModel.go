@@ -49,3 +49,19 @@ func (b *RemoveBranchItemRequest) Validate() (err error) {
 	}
 	return nil
 }
+
+func (b *AddBranchItemRequest) ConvertToBranchItem() BranchItem {
+	return BranchItem{
+		BranchID: b.BranchID,
+		ItemID:   b.ItemID,
+		Stock:    b.AddedStock,
+	}
+}
+
+func (b *RemoveBranchItemRequest) ConvertToBranchItem() BranchItem {
+	return BranchItem{
+		BranchID: b.BranchID,
+		ItemID:   b.ItemID,
+		Stock:    b.RemovedStock,
+	}
+}

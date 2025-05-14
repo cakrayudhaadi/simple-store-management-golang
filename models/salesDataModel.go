@@ -40,3 +40,13 @@ func (s *SalesDataRequest) Validate() error {
 	}
 	return nil
 }
+
+func (s *SalesDataRequest) ConvertToSalesData() SalesData {
+	return SalesData{
+		BranchID:   s.BranchID,
+		ItemID:     s.ItemID,
+		EmployeeID: s.EmployeeID,
+		Amount:     s.Amount,
+		SoldDate:   s.SoldDate,
+	}
+}

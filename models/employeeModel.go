@@ -42,3 +42,10 @@ func (e *EmployeeRequest) Validate() error {
 	}
 	return nil
 }
+
+func (e *EmployeeRequest) ConvertToEmployee() Employee {
+	return Employee{
+		Name:     e.Name,
+		BranchID: e.BranchID,
+	}
+}

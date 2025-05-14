@@ -24,3 +24,9 @@ func (i *ItemTypeRequest) Validate() error {
 	}
 	return nil
 }
+
+func (i *ItemTypeRequest) ConvertToItemType() ItemType {
+	return ItemType{
+		Type: i.Type,
+	}
+}

@@ -45,3 +45,12 @@ func (i *ItemRequest) Validate() error {
 	}
 	return nil
 }
+
+func (i *ItemRequest) ConvertToItem() Item {
+	return Item{
+		Name:       i.Name,
+		ItemTypeID: i.ItemTypeID,
+		Price:      i.Price,
+		Profit:     i.Profit,
+	}
+}
