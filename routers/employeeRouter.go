@@ -18,7 +18,7 @@ func employeeInitiator(router *gin.Engine) {
 		api.GET("/:id", GetEmployee)
 		api.PUT("/:id", UpdateEmployee)
 		api.DELETE("/:id", DeleteEmployee)
-		api.GET("/:branchId/top", GetTopEmployee)
+		api.GET("/top/:branchId", GetTopEmployee)
 	}
 }
 

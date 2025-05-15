@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"simple-store-management/models"
 
 	"gorm.io/gorm"
@@ -12,6 +13,7 @@ type BranchItemRepository interface {
 	CreateBranchItem(branchItem models.BranchItem) error
 	UpdateBranchItem(branchItem models.BranchItem) error
 	DeleteBranchItem(id int) error
+	GetBranchItemByBranchIdAndItemId(branchId int, itemId int) (branchItem models.BranchItem, err error)
 }
 
 type branchItemRepository struct {
@@ -46,5 +48,16 @@ func (repo *branchItemRepository) UpdateBranchItem(branchItem models.BranchItem)
 
 func (repo *branchItemRepository) DeleteBranchItem(id int) (err error) {
 	err = repo.db.Where("id = ?", id).Delete(&models.BranchItem{}).Error
+	return
+}
+
+func (repo *branchItemRepository) GetBranchItemByBranchIdAndItemId(branchId int, itemId int) (branchItem models.BranchItem, err error) {
+	err = repo.db.Where("branch_id = ? AND item_id = ?", branchId, itemId).Find(&branchItem).Error
+	if err != nil {
+		return
+	}
+	if branchItem.ID == 0 {
+		err = errors.New("branch item not found")
+	}
 	return
 }

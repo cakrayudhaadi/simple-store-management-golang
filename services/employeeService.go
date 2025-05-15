@@ -145,6 +145,18 @@ func validateEmployeeReqAndConvertToEmployee(ctx *gin.Context) (employees models
 	return
 }
 
-func (service *employeeService) GetTopEmployee(ctx *gin.Context) (employee models.TopEmployeeResponse, err error) {
+func (service *employeeService) GetTopEmployee(ctx *gin.Context) (topEmployee models.TopEmployeeResponse, err error) {
+	var topEmployeeRequest models.TopEmployeeRequest
+
+	err = ctx.ShouldBindJSON(&topEmployeeRequest)
+	if err != nil {
+		err = errors.New("parameter yang dimasukkan salah")
+		return
+	}
+
+	topEmployee, err = service.employeeRepository.GetTopEmployee(topEmployeeRequest.Month, topEmployeeRequest.Year, topEmployeeRequest.BranchID)
+	if err != nil {
+		err = errors.New("data top employee gagal diambil")
+	}
 	return
 }

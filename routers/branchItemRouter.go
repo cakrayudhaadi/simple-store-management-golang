@@ -18,8 +18,6 @@ func branchItemInitiator(router *gin.Engine) {
 		api.GET("/:id", GetBranchItem)
 		api.PUT("/:id", UpdateBranchItem)
 		api.DELETE("/:id", DeleteBranchItem)
-		api.PUT("/add", AddItemStock)
-		api.PUT("/remove", RemoveItemStock)
 	}
 }
 
@@ -96,34 +94,4 @@ func DeleteBranchItem(ctx *gin.Context) {
 	}
 
 	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil dihapus")
-}
-
-func AddItemStock(ctx *gin.Context) {
-	var (
-		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
-	)
-
-	err := branchItemSrv.AddItemStock(ctx)
-	if err != nil {
-		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil diubah")
-}
-
-func RemoveItemStock(ctx *gin.Context) {
-	var (
-		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
-	)
-
-	err := branchItemSrv.RemoveItemStock(ctx)
-	if err != nil {
-		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
-		return
-	}
-
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil diubah")
 }

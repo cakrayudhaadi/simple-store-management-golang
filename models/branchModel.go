@@ -41,7 +41,8 @@ type ItemsOfBranchResponse struct {
 }
 
 type TopBranchRequest struct {
-	Periode string `json:"name"`
+	Month int `json:"month"`
+	Year  int `json:"year"`
 }
 
 type TopBranchResponse struct {

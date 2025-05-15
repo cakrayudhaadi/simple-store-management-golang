@@ -148,13 +148,43 @@ func validateBranchReqAndConvertToBranch(ctx *gin.Context) (branchs models.Branc
 }
 
 func (service *branchService) GetBranchWithEmployees(ctx *gin.Context) (branch models.EmployeesOfBranchResponse, err error) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	branch, err = service.branchRepository.GetBranchWithEmployees(id)
+	if branch.ID == 0 {
+		err = errors.New("data branch tidak ada")
+	} else if err != nil {
+		err = errors.New("data branch gagal diambil")
+	}
+
 	return
 }
 
 func (service *branchService) GetBranchWithItems(ctx *gin.Context) (branch models.ItemsOfBranchResponse, err error) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	branch, err = service.branchRepository.GetBranchWithItems(id)
+	if branch.ID == 0 {
+		err = errors.New("data branch tidak ada")
+	} else if err != nil {
+		err = errors.New("data branch gagal diambil")
+	}
+
 	return
 }
 
-func (service *branchService) GetTopBranch(ctx *gin.Context) (branch models.TopBranchResponse, err error) {
+func (service *branchService) GetTopBranch(ctx *gin.Context) (topBranch models.TopBranchResponse, err error) {
+	var topBranchRequest models.TopBranchRequest
+
+	err = ctx.ShouldBindJSON(&topBranchRequest)
+	if err != nil {
+		err = errors.New("parameter yang dimasukkan salah")
+		return
+	}
+
+	topBranch, err = service.branchRepository.GetTopBranch(topBranchRequest.Month, topBranchRequest.Year)
+	if err != nil {
+		err = errors.New("data top branch gagal diambil")
+	}
 	return
 }

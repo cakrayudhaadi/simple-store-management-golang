@@ -20,12 +20,15 @@ type SalesDataService interface {
 }
 
 type salesDataService struct {
-	salesDataRepository repositories.SalesDataRepository
+	salesDataRepository  repositories.SalesDataRepository
+	branchItemRepository repositories.BranchItemRepository
 }
 
-func NewSalesDataService(salesDataRepository repositories.SalesDataRepository) SalesDataService {
+func NewSalesDataService(salesDataRepository repositories.SalesDataRepository,
+	branchItemRepository repositories.BranchItemRepository) SalesDataService {
 	return &salesDataService{
 		salesDataRepository,
+		branchItemRepository,
 	}
 }
 
@@ -37,14 +40,32 @@ func (service *salesDataService) CreateSalesData(ctx *gin.Context) (err error) {
 		return
 	}
 
+	branchItem, err := service.branchItemRepository.GetBranchItemByBranchIdAndItemId(newSalesData.BranchID, newSalesData.ItemID)
+	if err != nil {
+		err = errors.New("branch item tidak ada")
+		return
+	}
+
+	if branchItem.Stock < newSalesData.Amount {
+		err = errors.New("stock tidak cukup")
+		return
+	}
+
 	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
 	newSalesData.CreatedBy = loginName
 	newSalesData.CreatedAt = time.Now()
+	branchItem.Stock -= newSalesData.Amount
 
 	err = service.salesDataRepository.CreateSalesData(newSalesData)
+	if err != nil {
+		err = errors.New("data salesData gagal dibuat")
+		return
+	}
+
+	err = service.branchItemRepository.UpdateBranchItem(branchItem)
 	if err != nil {
 		err = errors.New("data salesData gagal dibuat")
 	}

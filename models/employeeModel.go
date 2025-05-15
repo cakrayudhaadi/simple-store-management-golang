@@ -26,8 +26,9 @@ type EmployeeOnBranchResponse struct {
 }
 
 type TopEmployeeRequest struct {
-	BranchID int    `json:"branch_id"`
-	Periode  string `json:"name"`
+	BranchID int `json:"branch_id"`
+	Month    int `json:"month"`
+	Year     int `json:"year"`
 }
 
 type TopEmployeeResponse struct {

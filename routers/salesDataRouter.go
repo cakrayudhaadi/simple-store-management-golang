@@ -23,8 +23,9 @@ func salesDataInitiator(router *gin.Engine) {
 
 func CreateSalesData(ctx *gin.Context) {
 	var (
-		salesDataRepo = repositories.NewSalesDataRepository(connection.DBConnections)
-		salesDataSrv  = services.NewSalesDataService(salesDataRepo)
+		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo)
 	)
 
 	err := salesDataSrv.CreateSalesData(ctx)
@@ -38,8 +39,9 @@ func CreateSalesData(ctx *gin.Context) {
 
 func GetAllSalesDatas(ctx *gin.Context) {
 	var (
-		salesDataRepo = repositories.NewSalesDataRepository(connection.DBConnections)
-		salesDataSrv  = services.NewSalesDataService(salesDataRepo)
+		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo)
 	)
 
 	salesDatas, err := salesDataSrv.GetAllSalesData(ctx)
@@ -53,8 +55,9 @@ func GetAllSalesDatas(ctx *gin.Context) {
 
 func GetSalesData(ctx *gin.Context) {
 	var (
-		salesDataRepo = repositories.NewSalesDataRepository(connection.DBConnections)
-		salesDataSrv  = services.NewSalesDataService(salesDataRepo)
+		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo)
 	)
 
 	salesData, err := salesDataSrv.GetSalesData(ctx)
@@ -68,8 +71,9 @@ func GetSalesData(ctx *gin.Context) {
 
 func UpdateSalesData(ctx *gin.Context) {
 	var (
-		salesDataRepo = repositories.NewSalesDataRepository(connection.DBConnections)
-		salesDataSrv  = services.NewSalesDataService(salesDataRepo)
+		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo)
 	)
 
 	err := salesDataSrv.UpdateSalesData(ctx)
@@ -83,8 +87,9 @@ func UpdateSalesData(ctx *gin.Context) {
 
 func DeleteSalesData(ctx *gin.Context) {
 	var (
-		salesDataRepo = repositories.NewSalesDataRepository(connection.DBConnections)
-		salesDataSrv  = services.NewSalesDataService(salesDataRepo)
+		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo)
 	)
 
 	err := salesDataSrv.DeleteSalesData(ctx)
