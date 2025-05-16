@@ -2,7 +2,9 @@ package repositories
 
 import (
 	"errors"
+	"fmt"
 	"simple-store-management/models"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -55,25 +57,36 @@ func (repo *employeeRepository) DeleteEmployee(id int) (err error) {
 }
 
 func (repo *employeeRepository) GetTopEmployee(month, year, branchID int) (employee models.TopEmployeeResponse, err error) {
+	var timestampStart string
+	var timestampEnd string
 	if month == 0 {
+		timestampStart = fmt.Sprintf("%d-01-01 00:00:00", year)
+		timestampEnd = fmt.Sprintf("%d-12-31 23:59:59", year)
+
 		err = repo.db.Table("employee").
-			Select("employee.id, employee.name, branch.id, branch.name, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.price) AS total_profit").
+			Select("employee.id AS id, employee.name AS name, branch.id AS branch_id, branch.name AS branch_name, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.price) AS total_profit").
 			Joins("JOIN branch ON employee.branch_id = branch.id").
 			Joins("JOIN sales_data ON employee.id = sales_data.employee_id").
 			Joins("JOIN item ON sales_data.item_id = item.id").
-			Where("YEAR(sales_data.sold_date) = ? AND employee.branch_id = ?", month, year, branchID).
-			Group("employee.id").
+			Where("sales_data.sold_date >= ? AND sales_data.sold_date <= ? AND employee.branch_id = ?", timestampStart, timestampEnd, branchID).
+			Group("employee.id, branch.id").
 			Order("total_profit DESC").
 			Limit(1).
 			Scan(&employee).Error
 	} else {
+		firstOfMonth := time.Date(year, time.Month(month), 1, 0, 0, 0, 0, time.Now().Location())
+		lastOfMonth := firstOfMonth.AddDate(0, 1, -1)
+
+		timestampStart = fmt.Sprintf("%d-%d-01 00:00:00", year, month)
+		timestampEnd = fmt.Sprintf("%d-%d-%d 23:59:59", year, month, lastOfMonth.Day())
+
 		err = repo.db.Table("employee").
-			Select("employee.id, employee.name, branch.id, branch.name, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.price) AS total_profit").
+			Select("employee.id AS id, employee.name AS name, branch.id AS branch_id, branch.name AS branch_name, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.price) AS total_profit").
 			Joins("JOIN branch ON employee.branch_id = branch.id").
 			Joins("JOIN sales_data ON employee.id = sales_data.employee_id").
 			Joins("JOIN item ON sales_data.item_id = item.id").
-			Where("MONTH(sales_data.sold_date) = ? AND YEAR(sales_data.sold_date) = ? AND employee.branch_id = ?", month, year, branchID).
-			Group("employee.id").
+			Where("sales_data.sold_date >= ? AND sales_data.sold_date <= ? AND employee.branch_id = ?", timestampStart, timestampEnd, branchID).
+			Group("employee.id, branch.id").
 			Order("total_profit DESC").
 			Limit(1).
 			Scan(&employee).Error

@@ -20,6 +20,7 @@ func branchInitiator(router *gin.Engine) {
 		api.DELETE("/:id", DeleteBranch)
 		api.GET("/employees/:id", GetBranchWithEmployees)
 		api.GET("/items/:id", GetBranchWithItems)
+		api.GET("/detail/:id", GetBranchDetail)
 		api.GET("/top", GetTopBranch)
 	}
 }
@@ -61,6 +62,21 @@ func GetBranch(ctx *gin.Context) {
 	)
 
 	branch, err := branchSrv.GetBranch(ctx)
+	if err != nil {
+		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch successfully loaded", branch)
+}
+
+func GetBranchDetail(ctx *gin.Context) {
+	var (
+		branchRepo = repositories.NewBranchRepository(connection.DBConnections)
+		branchSrv  = services.NewBranchService(branchRepo)
+	)
+
+	branch, err := branchSrv.GetBranchDetail(ctx)
 	if err != nil {
 		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
 		return

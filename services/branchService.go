@@ -19,6 +19,7 @@ type BranchService interface {
 	GetBranchWithEmployees(ctx *gin.Context) (branch models.EmployeesOfBranchResponse, err error)
 	GetBranchWithItems(ctx *gin.Context) (branch models.ItemsOfBranchResponse, err error)
 	GetTopBranch(ctx *gin.Context) (branch models.TopBranchResponse, err error)
+	GetBranchDetail(ctx *gin.Context) (branch models.BranchDetailResponse, err error)
 }
 
 type branchService struct {
@@ -69,6 +70,14 @@ func (service *branchService) GetBranch(ctx *gin.Context) (branch models.Branch,
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	branch, err = service.branchRepository.GetBranch(id)
+
+	return
+}
+
+func (service *branchService) GetBranchDetail(ctx *gin.Context) (branch models.BranchDetailResponse, err error) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	branch, err = service.branchRepository.GetBranchDetail(id)
 
 	return
 }
@@ -169,10 +178,14 @@ func (service *branchService) GetBranchWithItems(ctx *gin.Context) (branch model
 
 func (service *branchService) GetTopBranch(ctx *gin.Context) (topBranch models.TopBranchResponse, err error) {
 	var topBranchRequest models.TopBranchRequest
-
-	err = ctx.ShouldBindJSON(&topBranchRequest)
+	topBranchRequest.Month, err = strconv.Atoi(ctx.Query("month"))
 	if err != nil {
-		err = errors.New("parameter is not valid")
+		err = errors.New("parameter month is required")
+		return
+	}
+	topBranchRequest.Year, err = strconv.Atoi(ctx.Query("year"))
+	if err != nil {
+		err = errors.New("parameter year is required")
 		return
 	}
 

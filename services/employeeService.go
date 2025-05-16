@@ -141,10 +141,19 @@ func validateEmployeeReqAndConvertToEmployee(ctx *gin.Context) (employees models
 
 func (service *employeeService) GetTopEmployee(ctx *gin.Context) (topEmployee models.TopEmployeeResponse, err error) {
 	var topEmployeeRequest models.TopEmployeeRequest
-
-	err = ctx.ShouldBindJSON(&topEmployeeRequest)
+	topEmployeeRequest.BranchID, err = strconv.Atoi(ctx.Query("branch_id"))
 	if err != nil {
-		err = errors.New("parameter is not valid")
+		err = errors.New("parameter branch_id is required")
+		return
+	}
+	topEmployeeRequest.Month, err = strconv.Atoi(ctx.Query("month"))
+	if err != nil {
+		err = errors.New("parameter month is required")
+		return
+	}
+	topEmployeeRequest.Year, err = strconv.Atoi(ctx.Query("year"))
+	if err != nil {
+		err = errors.New("parameter year is required")
 		return
 	}
 

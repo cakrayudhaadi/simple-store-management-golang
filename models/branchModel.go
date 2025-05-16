@@ -45,6 +45,18 @@ type ItemsOfBranchResponse struct {
 	Items   []ItemsOnBranchResponse `json:"items"`
 }
 
+type BranchDetailResponse struct {
+	ID        int                        `json:"id"`
+	Name      string                     `json:"name"`
+	Address   string                     `json:"address"`
+	Employees []EmployeeOnBranchResponse `json:"employees"`
+	Items     []ItemsOnBranchResponse    `json:"items"`
+	CreatedBy string                     `json:"created_by"`
+	CreatedAt time.Time                  `json:"created_at"`
+	UpdatedBy string                     `json:"updated_by"`
+	UpdatedAt time.Time                  `json:"updated_at"`
+}
+
 type TopBranchRequest struct {
 	Month int `json:"month"`
 	Year  int `json:"year"`
