@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
 	"strconv"
@@ -22,13 +21,23 @@ type SalesDataService interface {
 type salesDataService struct {
 	salesDataRepository  repositories.SalesDataRepository
 	branchItemRepository repositories.BranchItemRepository
+	branchRepository     repositories.BranchRepository
+	itemRepository       repositories.ItemRepository
+	employeeRepository   repositories.EmployeeRepository
 }
 
 func NewSalesDataService(salesDataRepository repositories.SalesDataRepository,
-	branchItemRepository repositories.BranchItemRepository) SalesDataService {
+	branchItemRepository repositories.BranchItemRepository,
+	branchRepository repositories.BranchRepository,
+	itemRepository repositories.ItemRepository,
+	employeeRepository repositories.EmployeeRepository,
+) SalesDataService {
 	return &salesDataService{
 		salesDataRepository,
 		branchItemRepository,
+		branchRepository,
+		itemRepository,
+		employeeRepository,
 	}
 }
 
@@ -40,34 +49,57 @@ func (service *salesDataService) CreateSalesData(ctx *gin.Context) (err error) {
 		return
 	}
 
-	branchItem, err := service.branchItemRepository.GetBranchItemByBranchIdAndItemId(newSalesData.BranchID, newSalesData.ItemID)
+	_, err = service.itemRepository.GetItem(newSalesData.ItemID)
 	if err != nil {
-		err = errors.New("branch item tidak ada")
+		err = errors.New("data item not found")
 		return
+	}
+
+	_, err = service.employeeRepository.GetEmployee(newSalesData.EmployeeID)
+	if err != nil {
+		err = errors.New("data employee not found")
+		return
+	}
+
+	branchID, err := service.branchRepository.GetBranchIDByEmployeeID(newSalesData.EmployeeID)
+	if err != nil {
+		err = errors.New("data employee does not belong to any branch")
+		return
+	}
+	newSalesData.BranchID = branchID
+
+	branchItem, err := service.branchItemRepository.GetBranchItemByBranchIDAndItemID(newSalesData.BranchID, newSalesData.ItemID)
+	if err != nil {
+		err = errors.New("branch item not found")
+		return
+	}
+
+	if branchItem.ID == 0 {
+		err = errors.New("branch does not have this item")
 	}
 
 	if branchItem.Stock < newSalesData.Amount {
-		err = errors.New("stock tidak cukup")
+		err = errors.New("stock not enough")
 		return
 	}
 
-	loginName, err := middlewares.GetUsernameFromToken(ctx)
+	// loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	newSalesData.CreatedBy = loginName
+	// newSalesData.CreatedBy = loginName
 	newSalesData.CreatedAt = time.Now()
 	branchItem.Stock -= newSalesData.Amount
 
 	err = service.salesDataRepository.CreateSalesData(newSalesData)
 	if err != nil {
-		err = errors.New("data salesData gagal dibuat")
+		err = errors.New("data salesData failed to be created")
 		return
 	}
 
 	err = service.branchItemRepository.UpdateBranchItem(branchItem)
 	if err != nil {
-		err = errors.New("data salesData gagal dibuat")
+		err = errors.New("data salesData failed to be created")
 	}
 
 	return
@@ -76,7 +108,7 @@ func (service *salesDataService) CreateSalesData(ctx *gin.Context) (err error) {
 func (service *salesDataService) GetAllSalesData(ctx *gin.Context) (salesDatas []models.SalesData, err error) {
 	salesDatas, err = service.salesDataRepository.GetAllSalesDatas()
 	if err != nil {
-		err = errors.New("data salesData gagal diambil")
+		err = errors.New("data salesData failed to be loaded")
 	} else if len(salesDatas) == 0 {
 		err = errors.New("data salesData kosong")
 	}
@@ -88,11 +120,6 @@ func (service *salesDataService) GetSalesData(ctx *gin.Context) (salesData model
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	salesData, err = service.salesDataRepository.GetSalesData(id)
-	if salesData.ID == 0 {
-		err = errors.New("data salesData tidak ada")
-	} else if err != nil {
-		err = errors.New("data salesData gagal diambil")
-	}
 
 	return
 }
@@ -106,25 +133,59 @@ func (service *salesDataService) UpdateSalesData(ctx *gin.Context) (err error) {
 		return
 	}
 
+	_, err = service.itemRepository.GetItem(newSalesData.ItemID)
+	if err != nil {
+		err = errors.New("data item not found")
+		return
+	}
+
+	_, err = service.employeeRepository.GetEmployee(newSalesData.EmployeeID)
+	if err != nil {
+		err = errors.New("data employee not found")
+		return
+	}
+
+	branchID, err := service.branchRepository.GetBranchIDByEmployeeID(newSalesData.EmployeeID)
+	if err != nil {
+		err = errors.New("data employee does not belong to any branch")
+		return
+	}
+	newSalesData.BranchID = branchID
+
+	branchItem, err := service.branchItemRepository.GetBranchItemByBranchIDAndItemID(newSalesData.BranchID, newSalesData.ItemID)
+	if err != nil {
+		err = errors.New("branch item not found")
+		return
+	}
+
+	if branchItem.ID == 0 {
+		err = errors.New("branch does not have this item")
+	}
+
+	if branchItem.Stock < newSalesData.Amount {
+		err = errors.New("stock not enough")
+		return
+	}
+
 	oldSalesData, err := service.GetSalesData(ctx)
 	if err != nil {
-		err = errors.New("data salesData tidak ditemukan")
+		err = errors.New("data salesData not found")
 		return
 	}
 	newSalesData.ID = id
 	newSalesData.CreatedBy = oldSalesData.CreatedBy
 	newSalesData.CreatedAt = oldSalesData.CreatedAt
 
-	loginName, err := middlewares.GetUsernameFromToken(ctx)
+	// loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	newSalesData.UpdatedBy = loginName
+	// newSalesData.UpdatedBy = loginName
 	newSalesData.UpdatedAt = time.Now()
 
 	err = service.salesDataRepository.UpdateSalesData(newSalesData)
 	if err != nil {
-		err = errors.New("data salesData gagal diubah")
+		err = errors.New("data salesData failed to be updated")
 	}
 
 	return
@@ -135,13 +196,13 @@ func (service *salesDataService) DeleteSalesData(ctx *gin.Context) (err error) {
 
 	_, err = service.GetSalesData(ctx)
 	if err != nil {
-		err = errors.New("data salesData tidak ditemukan")
+		err = errors.New("data salesData not found")
 		return
 	}
 
 	err = service.salesDataRepository.DeleteSalesData(id)
 	if err != nil {
-		err = errors.New("data salesData gagal dihapus")
+		err = errors.New("data salesData failed to be deleted")
 	}
 
 	return
@@ -152,7 +213,7 @@ func validateSalesDataReqAndConvertToSalesData(ctx *gin.Context) (salesDatas mod
 
 	err = ctx.ShouldBindJSON(&salesDatasRequest)
 	if err != nil {
-		err = errors.New("parameter yang dimasukkan salah")
+		err = errors.New("parameter is not valid")
 		return
 	}
 
@@ -160,7 +221,10 @@ func validateSalesDataReqAndConvertToSalesData(ctx *gin.Context) (salesDatas mod
 	if err != nil {
 		return
 	}
-	salesDatas = salesDatasRequest.ConvertToSalesData()
+	salesDatas, err = salesDatasRequest.ConvertToSalesData()
+	if err != nil {
+		return
+	}
 
 	return
 }

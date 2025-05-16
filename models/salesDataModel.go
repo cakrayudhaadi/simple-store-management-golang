@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"simple-store-management/commons"
 	"time"
 )
 
@@ -18,35 +19,36 @@ type SalesData struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
+func (SalesData) TableName() string {
+	return "sales_data"
+}
+
 type SalesDataRequest struct {
-	BranchID   int       `json:"branch_id"`
-	ItemID     int       `json:"item_id"`
-	EmployeeID int       `json:"employee_id"`
-	Amount     int       `json:"amount"`
-	SoldDate   time.Time `json:"sold_date"`
+	ItemID     int    `json:"item_id"`
+	EmployeeID int    `json:"employee_id"`
+	Amount     int    `json:"amount"`
+	SoldDate   string `json:"sold_date"`
 }
 
 func (s *SalesDataRequest) Validate() error {
-	if s.BranchID == 0 {
-		return errors.New("branch_id is required")
-	} else if s.ItemID == 0 {
+	if commons.IsValueEmpty(s.ItemID) {
 		return errors.New("item_id is required")
-	} else if s.EmployeeID == 0 {
+	} else if commons.IsValueEmpty(s.EmployeeID) {
 		return errors.New("employee_id is required")
 	} else if s.Amount <= 0 {
 		return errors.New("amount must be greater than 0")
-	} else if s.SoldDate.IsZero() {
+	} else if commons.IsValueEmpty(s.SoldDate) {
 		return errors.New("sold_date is required")
 	}
 	return nil
 }
 
-func (s *SalesDataRequest) ConvertToSalesData() SalesData {
+func (s *SalesDataRequest) ConvertToSalesData() (SalesData, error) {
+	soldDate, err := time.Parse("2006-01-02", s.SoldDate)
 	return SalesData{
-		BranchID:   s.BranchID,
 		ItemID:     s.ItemID,
 		EmployeeID: s.EmployeeID,
 		Amount:     s.Amount,
-		SoldDate:   s.SoldDate,
-	}
+		SoldDate:   soldDate,
+	}, err
 }

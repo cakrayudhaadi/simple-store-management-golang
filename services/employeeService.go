@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
 	"strconv"
@@ -38,16 +37,16 @@ func (service *employeeService) CreateEmployee(ctx *gin.Context) (err error) {
 		return
 	}
 
-	loginName, err := middlewares.GetUsernameFromToken(ctx)
+	// loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	newEmployee.CreatedBy = loginName
+	// newEmployee.CreatedBy = loginName
 	newEmployee.CreatedAt = time.Now()
 
 	err = service.employeeRepository.CreateEmployee(newEmployee)
 	if err != nil {
-		err = errors.New("data employee gagal dibuat")
+		err = errors.New("data employee failed to be created")
 	}
 
 	return
@@ -56,7 +55,7 @@ func (service *employeeService) CreateEmployee(ctx *gin.Context) (err error) {
 func (service *employeeService) GetAllEmployee(ctx *gin.Context) (employees []models.Employee, err error) {
 	employees, err = service.employeeRepository.GetAllEmployees()
 	if err != nil {
-		err = errors.New("data employee gagal diambil")
+		err = errors.New("data employee failed to be loaded")
 	} else if len(employees) == 0 {
 		err = errors.New("data employee kosong")
 	}
@@ -68,11 +67,6 @@ func (service *employeeService) GetEmployee(ctx *gin.Context) (employee models.E
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	employee, err = service.employeeRepository.GetEmployee(id)
-	if employee.ID == 0 {
-		err = errors.New("data employee tidak ada")
-	} else if err != nil {
-		err = errors.New("data employee gagal diambil")
-	}
 
 	return
 }
@@ -88,23 +82,23 @@ func (service *employeeService) UpdateEmployee(ctx *gin.Context) (err error) {
 
 	oldEmployee, err := service.GetEmployee(ctx)
 	if err != nil {
-		err = errors.New("data employee tidak ditemukan")
+		err = errors.New("data employee not found")
 		return
 	}
 	newEmployee.ID = id
 	newEmployee.CreatedBy = oldEmployee.CreatedBy
 	newEmployee.CreatedAt = oldEmployee.CreatedAt
 
-	loginName, err := middlewares.GetUsernameFromToken(ctx)
+	// loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	newEmployee.UpdatedBy = loginName
+	// newEmployee.UpdatedBy = loginName
 	newEmployee.UpdatedAt = time.Now()
 
 	err = service.employeeRepository.UpdateEmployee(newEmployee)
 	if err != nil {
-		err = errors.New("data employee gagal diubah")
+		err = errors.New("data employee failed to be updated")
 	}
 
 	return
@@ -115,13 +109,13 @@ func (service *employeeService) DeleteEmployee(ctx *gin.Context) (err error) {
 
 	_, err = service.GetEmployee(ctx)
 	if err != nil {
-		err = errors.New("data employee tidak ditemukan")
+		err = errors.New("data employee not found")
 		return
 	}
 
 	err = service.employeeRepository.DeleteEmployee(id)
 	if err != nil {
-		err = errors.New("data employee gagal dihapus")
+		err = errors.New("data employee failed to be deleted")
 	}
 
 	return
@@ -132,7 +126,7 @@ func validateEmployeeReqAndConvertToEmployee(ctx *gin.Context) (employees models
 
 	err = ctx.ShouldBindJSON(&employeesRequest)
 	if err != nil {
-		err = errors.New("parameter yang dimasukkan salah")
+		err = errors.New("parameter is not valid")
 		return
 	}
 
@@ -150,13 +144,13 @@ func (service *employeeService) GetTopEmployee(ctx *gin.Context) (topEmployee mo
 
 	err = ctx.ShouldBindJSON(&topEmployeeRequest)
 	if err != nil {
-		err = errors.New("parameter yang dimasukkan salah")
+		err = errors.New("parameter is not valid")
 		return
 	}
 
 	topEmployee, err = service.employeeRepository.GetTopEmployee(topEmployeeRequest.Month, topEmployeeRequest.Year, topEmployeeRequest.BranchID)
 	if err != nil {
-		err = errors.New("data top employee gagal diambil")
+		err = errors.New("data top employee failed to be loaded")
 	}
 	return
 }

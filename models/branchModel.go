@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"simple-store-management/commons"
 	"time"
 )
 
@@ -13,6 +14,10 @@ type Branch struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedBy string    `json:"updated_by"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (Branch) TableName() string {
+	return "branch"
 }
 
 type BranchRequest struct {
@@ -54,9 +59,9 @@ type TopBranchResponse struct {
 }
 
 func (b *BranchRequest) Validate() error {
-	if b.Name == "" {
+	if commons.IsValueEmpty(b.Name) {
 		return errors.New("name is required")
-	} else if b.Address == "" {
+	} else if commons.IsValueEmpty(b.Address) {
 		return errors.New("address is required")
 	}
 	return nil

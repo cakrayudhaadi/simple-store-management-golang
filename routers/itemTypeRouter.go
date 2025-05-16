@@ -33,7 +33,7 @@ func CreateItemType(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data itemType berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data itemType successfully created")
 }
 
 func GetAllItemTypes(ctx *gin.Context) {
@@ -48,7 +48,7 @@ func GetAllItemTypes(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data itemTypes berhasil diambil", itemTypes)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data itemTypes successfully loaded", itemTypes)
 }
 
 func GetItemType(ctx *gin.Context) {
@@ -63,7 +63,7 @@ func GetItemType(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data itemType berhasil diambil", itemType)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data itemType successfully loaded", itemType)
 }
 
 func UpdateItemType(ctx *gin.Context) {
@@ -78,7 +78,7 @@ func UpdateItemType(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data itemType berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data itemType successfully updated")
 }
 
 func DeleteItemType(ctx *gin.Context) {
@@ -93,5 +93,5 @@ func DeleteItemType(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data itemType berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data itemType successfully deleted")
 }

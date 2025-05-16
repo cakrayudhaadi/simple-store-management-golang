@@ -30,7 +30,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "login berhasil dilakukan", token)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "successfully logged in", token)
 }
 
 func SignUp(ctx *gin.Context) {
@@ -45,5 +45,5 @@ func SignUp(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "akun berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "user account successfully created")
 }

@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"simple-store-management/commons"
 	"time"
 )
 
@@ -40,10 +41,14 @@ type TopEmployeeResponse struct {
 	TotalProfit int    `json:"total_profit"`
 }
 
+func (Employee) TableName() string {
+	return "employee"
+}
+
 func (e *EmployeeRequest) Validate() error {
-	if e.Name == "" {
+	if commons.IsValueEmpty(e.Name) {
 		return errors.New("name is required")
-	} else if e.BranchID == 0 {
+	} else if commons.IsValueEmpty(e.BranchID) {
 		return errors.New("branch_id is required")
 	}
 	return nil

@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"simple-store-management/models"
 
 	"gorm.io/gorm"
@@ -15,6 +16,7 @@ type BranchRepository interface {
 	GetBranchWithEmployees(id int) (branch models.EmployeesOfBranchResponse, err error)
 	GetBranchWithItems(id int) (branch models.ItemsOfBranchResponse, err error)
 	GetTopBranch(month, year int) (branch models.TopBranchResponse, err error)
+	GetBranchIDByEmployeeID(employeeID int) (branchID int, err error)
 }
 
 type branchRepository struct {
@@ -34,6 +36,9 @@ func (repo *branchRepository) GetAllBranchs() (branchs []models.Branch, err erro
 
 func (repo *branchRepository) GetBranch(id int) (branch models.Branch, err error) {
 	err = repo.db.Where("id = ?", id).Find(&branch).Error
+	if branch.ID == 0 {
+		err = errors.New("branch not found")
+	}
 	return
 }
 
@@ -54,7 +59,7 @@ func (repo *branchRepository) DeleteBranch(id int) (err error) {
 
 func (repo *branchRepository) GetBranchWithEmployees(id int) (branch models.EmployeesOfBranchResponse, err error) {
 	err = repo.db.Table("branch").
-		Select("branch.id, branch.name, branch.address").
+		Select("branch.id AS id, branch.name AS name, branch.address AS address").
 		Where("branch.id = ?", id).
 		Scan(&branch).Error
 	if err != nil {
@@ -62,7 +67,7 @@ func (repo *branchRepository) GetBranchWithEmployees(id int) (branch models.Empl
 	}
 
 	err = repo.db.Table("employee").
-		Select("employee.id, employee.name").
+		Select("employee.id AS id, employee.name AS name").
 		Where("employee.branch_id = ?", id).
 		Scan(&branch.Employees).Error
 	return
@@ -108,5 +113,19 @@ func (repo *branchRepository) GetTopBranch(month, year int) (branch models.TopBr
 			Scan(&branch).Error
 	}
 
+	return
+}
+
+func (repo *branchRepository) GetBranchIDByEmployeeID(employeeID int) (branchID int, err error) {
+	err = repo.db.Table("employee").
+		Select("branch_id").
+		Where("id = ?", employeeID).
+		Scan(&branchID).Error
+	if err != nil {
+		return
+	}
+	if branchID == 0 {
+		err = errors.New("branch not found")
+	}
 	return
 }

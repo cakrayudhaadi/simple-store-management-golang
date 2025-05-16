@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"simple-store-management/models"
 
 	"gorm.io/gorm"
@@ -31,6 +32,9 @@ func (repo *salesDataRepository) GetAllSalesDatas() (salesDatas []models.SalesDa
 
 func (repo *salesDataRepository) GetSalesData(id int) (salesData models.SalesData, err error) {
 	err = repo.db.Where("id = ?", id).Find(&salesData).Error
+	if salesData.ID == 0 {
+		err = errors.New("sales data not found")
+	}
 	return
 }
 

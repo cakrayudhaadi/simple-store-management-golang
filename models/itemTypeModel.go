@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"simple-store-management/commons"
 	"time"
 )
 
@@ -14,12 +15,16 @@ type ItemType struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+func (ItemType) TableName() string {
+	return "item_type"
+}
+
 type ItemTypeRequest struct {
 	Type string `json:"type"`
 }
 
 func (i *ItemTypeRequest) Validate() error {
-	if i.Type == "" {
+	if commons.IsValueEmpty(i.Type) {
 		return errors.New("type is required")
 	}
 	return nil

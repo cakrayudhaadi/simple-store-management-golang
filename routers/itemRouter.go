@@ -23,8 +23,9 @@ func itemInitiator(router *gin.Engine) {
 
 func CreateItem(ctx *gin.Context) {
 	var (
-		itemRepo = repositories.NewItemRepository(connection.DBConnections)
-		itemSrv  = services.NewItemService(itemRepo)
+		itemRepo     = repositories.NewItemRepository(connection.DBConnections)
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemSrv      = services.NewItemService(itemRepo, itemTypeRepo)
 	)
 
 	err := itemSrv.CreateItem(ctx)
@@ -33,13 +34,14 @@ func CreateItem(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item successfully created")
 }
 
 func GetAllItems(ctx *gin.Context) {
 	var (
-		itemRepo = repositories.NewItemRepository(connection.DBConnections)
-		itemSrv  = services.NewItemService(itemRepo)
+		itemRepo     = repositories.NewItemRepository(connection.DBConnections)
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemSrv      = services.NewItemService(itemRepo, itemTypeRepo)
 	)
 
 	items, err := itemSrv.GetAllItem(ctx)
@@ -48,13 +50,14 @@ func GetAllItems(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data items berhasil diambil", items)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data items successfully loaded", items)
 }
 
 func GetItem(ctx *gin.Context) {
 	var (
-		itemRepo = repositories.NewItemRepository(connection.DBConnections)
-		itemSrv  = services.NewItemService(itemRepo)
+		itemRepo     = repositories.NewItemRepository(connection.DBConnections)
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemSrv      = services.NewItemService(itemRepo, itemTypeRepo)
 	)
 
 	item, err := itemSrv.GetItem(ctx)
@@ -63,13 +66,14 @@ func GetItem(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data item berhasil diambil", item)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data item successfully loaded", item)
 }
 
 func UpdateItem(ctx *gin.Context) {
 	var (
-		itemRepo = repositories.NewItemRepository(connection.DBConnections)
-		itemSrv  = services.NewItemService(itemRepo)
+		itemRepo     = repositories.NewItemRepository(connection.DBConnections)
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemSrv      = services.NewItemService(itemRepo, itemTypeRepo)
 	)
 
 	err := itemSrv.UpdateItem(ctx)
@@ -78,13 +82,14 @@ func UpdateItem(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item successfully updated")
 }
 
 func DeleteItem(ctx *gin.Context) {
 	var (
-		itemRepo = repositories.NewItemRepository(connection.DBConnections)
-		itemSrv  = services.NewItemService(itemRepo)
+		itemRepo     = repositories.NewItemRepository(connection.DBConnections)
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemSrv      = services.NewItemService(itemRepo, itemTypeRepo)
 	)
 
 	err := itemSrv.DeleteItem(ctx)
@@ -93,5 +98,5 @@ func DeleteItem(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item successfully deleted")
 }

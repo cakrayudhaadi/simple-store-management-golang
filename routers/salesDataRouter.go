@@ -25,7 +25,10 @@ func CreateSalesData(ctx *gin.Context) {
 	var (
 		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
 		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		employeeRepo   = repositories.NewEmployeeRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo, branchRepo, itemRepo, employeeRepo)
 	)
 
 	err := salesDataSrv.CreateSalesData(ctx)
@@ -34,14 +37,17 @@ func CreateSalesData(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data salesData berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data salesData successfully created")
 }
 
 func GetAllSalesDatas(ctx *gin.Context) {
 	var (
 		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
 		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		employeeRepo   = repositories.NewEmployeeRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo, branchRepo, itemRepo, employeeRepo)
 	)
 
 	salesDatas, err := salesDataSrv.GetAllSalesData(ctx)
@@ -50,14 +56,17 @@ func GetAllSalesDatas(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data salesDatas berhasil diambil", salesDatas)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data salesDatas successfully loaded", salesDatas)
 }
 
 func GetSalesData(ctx *gin.Context) {
 	var (
 		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
 		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		employeeRepo   = repositories.NewEmployeeRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo, branchRepo, itemRepo, employeeRepo)
 	)
 
 	salesData, err := salesDataSrv.GetSalesData(ctx)
@@ -66,14 +75,17 @@ func GetSalesData(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data salesData berhasil diambil", salesData)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data salesData successfully loaded", salesData)
 }
 
 func UpdateSalesData(ctx *gin.Context) {
 	var (
 		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
 		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		employeeRepo   = repositories.NewEmployeeRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo, branchRepo, itemRepo, employeeRepo)
 	)
 
 	err := salesDataSrv.UpdateSalesData(ctx)
@@ -82,14 +94,17 @@ func UpdateSalesData(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data salesData berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data salesData successfully updated")
 }
 
 func DeleteSalesData(ctx *gin.Context) {
 	var (
 		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
 		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		employeeRepo   = repositories.NewEmployeeRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo, branchRepo, itemRepo, employeeRepo)
 	)
 
 	err := salesDataSrv.DeleteSalesData(ctx)
@@ -98,5 +113,5 @@ func DeleteSalesData(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data salesData berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data salesData successfully deleted")
 }

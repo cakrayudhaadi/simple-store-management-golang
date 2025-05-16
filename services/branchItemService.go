@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
 	"strconv"
@@ -21,32 +20,57 @@ type BranchItemService interface {
 
 type branchItemService struct {
 	branchItemRepository repositories.BranchItemRepository
+	branchRepository     repositories.BranchRepository
+	itemRepository       repositories.ItemRepository
 }
 
-func NewBranchItemService(branchItemRepository repositories.BranchItemRepository) BranchItemService {
+func NewBranchItemService(
+	branchItemRepository repositories.BranchItemRepository,
+	branchRepository repositories.BranchRepository,
+	itemRepository repositories.ItemRepository,
+) BranchItemService {
 	return &branchItemService{
 		branchItemRepository,
+		branchRepository,
+		itemRepository,
 	}
 }
 
 func (service *branchItemService) CreateBranchItem(ctx *gin.Context) (err error) {
 	var newBranchItem models.BranchItem
 
-	newBranchItem, err = validateAddBranchItemReqAndConvertToBranchItem(ctx)
+	newBranchItem, err = validateBranchItemReqAndConvertToBranchItem(ctx)
 	if err != nil {
 		return
 	}
 
-	loginName, err := middlewares.GetUsernameFromToken(ctx)
+	_, err = service.branchRepository.GetBranch(newBranchItem.BranchID)
+	if err != nil {
+		err = errors.New("data branch not found")
+		return
+	}
+
+	_, err = service.itemRepository.GetItem(newBranchItem.ItemID)
+	if err != nil {
+		err = errors.New("data item not found")
+		return
+	}
+
+	oldBranchItem, err := service.branchItemRepository.GetBranchItemByBranchIDAndItemID(newBranchItem.BranchID, newBranchItem.ItemID)
+	if oldBranchItem.ID != 0 {
+		err = errors.New("data branch item already exists")
+	}
+
+	// loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	newBranchItem.CreatedBy = loginName
+	// newBranchItem.CreatedBy = loginName
 	newBranchItem.CreatedAt = time.Now()
 
 	err = service.branchItemRepository.CreateBranchItem(newBranchItem)
 	if err != nil {
-		err = errors.New("data branchItem gagal dibuat")
+		err = errors.New("data branch item failed to be created")
 	}
 
 	return
@@ -55,9 +79,9 @@ func (service *branchItemService) CreateBranchItem(ctx *gin.Context) (err error)
 func (service *branchItemService) GetAllBranchItem(ctx *gin.Context) (branchItems []models.BranchItem, err error) {
 	branchItems, err = service.branchItemRepository.GetAllBranchItems()
 	if err != nil {
-		err = errors.New("data branchItem gagal diambil")
+		err = errors.New("data branch item failed to be loaded")
 	} else if len(branchItems) == 0 {
-		err = errors.New("data branchItem kosong")
+		err = errors.New("data branch item kosong")
 	}
 
 	return
@@ -67,11 +91,6 @@ func (service *branchItemService) GetBranchItem(ctx *gin.Context) (branchItem mo
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	branchItem, err = service.branchItemRepository.GetBranchItem(id)
-	if branchItem.ID == 0 {
-		err = errors.New("data branchItem tidak ada")
-	} else if err != nil {
-		err = errors.New("data branchItem gagal diambil")
-	}
 
 	return
 }
@@ -80,30 +99,45 @@ func (service *branchItemService) UpdateBranchItem(ctx *gin.Context) (err error)
 	var newBranchItem models.BranchItem
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
-	newBranchItem, err = validateAddBranchItemReqAndConvertToBranchItem(ctx)
+	newBranchItem, err = validateBranchItemUpdateAndConvertToBranchItem(ctx)
 	if err != nil {
 		return
 	}
 
 	oldBranchItem, err := service.GetBranchItem(ctx)
 	if err != nil {
-		err = errors.New("data branchItem tidak ditemukan")
+		err = errors.New("data branch item not found")
 		return
 	}
+	newBranchItem.BranchID = oldBranchItem.BranchID
+	newBranchItem.ItemID = oldBranchItem.ItemID
+
+	_, err = service.branchRepository.GetBranch(newBranchItem.BranchID)
+	if err != nil {
+		err = errors.New("data branch not found")
+		return
+	}
+
+	_, err = service.itemRepository.GetItem(newBranchItem.ItemID)
+	if err != nil {
+		err = errors.New("data item not found")
+		return
+	}
+
 	newBranchItem.ID = id
 	newBranchItem.CreatedBy = oldBranchItem.CreatedBy
 	newBranchItem.CreatedAt = oldBranchItem.CreatedAt
 
-	loginName, err := middlewares.GetUsernameFromToken(ctx)
+	// loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	newBranchItem.UpdatedBy = loginName
+	// newBranchItem.UpdatedBy = loginName
 	newBranchItem.UpdatedAt = time.Now()
 
 	err = service.branchItemRepository.UpdateBranchItem(newBranchItem)
 	if err != nil {
-		err = errors.New("data branchItem gagal diubah")
+		err = errors.New("data branch item failed to be updated")
 	}
 
 	return
@@ -114,24 +148,24 @@ func (service *branchItemService) DeleteBranchItem(ctx *gin.Context) (err error)
 
 	_, err = service.GetBranchItem(ctx)
 	if err != nil {
-		err = errors.New("data branchItem tidak ditemukan")
+		err = errors.New("data branch item not found")
 		return
 	}
 
 	err = service.branchItemRepository.DeleteBranchItem(id)
 	if err != nil {
-		err = errors.New("data branchItem gagal dihapus")
+		err = errors.New("data branch item failed to be deleted")
 	}
 
 	return
 }
 
-func validateAddBranchItemReqAndConvertToBranchItem(ctx *gin.Context) (branchItems models.BranchItem, err error) {
-	var branchItemsRequest models.AddBranchItemRequest
+func validateBranchItemReqAndConvertToBranchItem(ctx *gin.Context) (branchItems models.BranchItem, err error) {
+	var branchItemsRequest models.BranchItemRequest
 
 	err = ctx.ShouldBindJSON(&branchItemsRequest)
 	if err != nil {
-		err = errors.New("parameter yang dimasukkan salah")
+		err = errors.New("parameter is not valid")
 		return
 	}
 
@@ -144,12 +178,12 @@ func validateAddBranchItemReqAndConvertToBranchItem(ctx *gin.Context) (branchIte
 	return
 }
 
-func validateRemoveBranchItemReqAndConvertToBranchItem(ctx *gin.Context) (branchItems models.BranchItem, err error) {
-	var branchItemsRequest models.RemoveBranchItemRequest
+func validateBranchItemUpdateAndConvertToBranchItem(ctx *gin.Context) (branchItems models.BranchItem, err error) {
+	var branchItemsRequest models.BranchItemUpdateRequest
 
 	err = ctx.ShouldBindJSON(&branchItemsRequest)
 	if err != nil {
-		err = errors.New("parameter yang dimasukkan salah")
+		err = errors.New("parameter is not valid")
 		return
 	}
 

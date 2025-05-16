@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
 	"strconv"
@@ -40,16 +39,16 @@ func (service *branchService) CreateBranch(ctx *gin.Context) (err error) {
 		return
 	}
 
-	loginName, err := middlewares.GetUsernameFromToken(ctx)
+	// loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	newBranch.CreatedBy = loginName
+	// newBranch.CreatedBy = loginName
 	newBranch.CreatedAt = time.Now()
 
 	err = service.branchRepository.CreateBranch(newBranch)
 	if err != nil {
-		err = errors.New("data branch gagal dibuat")
+		err = errors.New("data branch failed to be created")
 	}
 
 	return
@@ -58,7 +57,7 @@ func (service *branchService) CreateBranch(ctx *gin.Context) (err error) {
 func (service *branchService) GetAllBranch(ctx *gin.Context) (branchs []models.Branch, err error) {
 	branchs, err = service.branchRepository.GetAllBranchs()
 	if err != nil {
-		err = errors.New("data branch gagal diambil")
+		err = errors.New("data branch failed to be loaded")
 	} else if len(branchs) == 0 {
 		err = errors.New("data branch kosong")
 	}
@@ -70,11 +69,6 @@ func (service *branchService) GetBranch(ctx *gin.Context) (branch models.Branch,
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	branch, err = service.branchRepository.GetBranch(id)
-	if branch.ID == 0 {
-		err = errors.New("data branch tidak ada")
-	} else if err != nil {
-		err = errors.New("data branch gagal diambil")
-	}
 
 	return
 }
@@ -90,23 +84,23 @@ func (service *branchService) UpdateBranch(ctx *gin.Context) (err error) {
 
 	oldBranch, err := service.GetBranch(ctx)
 	if err != nil {
-		err = errors.New("data branch tidak ditemukan")
+		err = errors.New("data branch not found")
 		return
 	}
 	newBranch.ID = id
 	newBranch.CreatedBy = oldBranch.CreatedBy
 	newBranch.CreatedAt = oldBranch.CreatedAt
 
-	loginName, err := middlewares.GetUsernameFromToken(ctx)
+	// loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	newBranch.UpdatedBy = loginName
+	// newBranch.UpdatedBy = loginName
 	newBranch.UpdatedAt = time.Now()
 
 	err = service.branchRepository.UpdateBranch(newBranch)
 	if err != nil {
-		err = errors.New("data branch gagal diubah")
+		err = errors.New("data branch failed to be updated")
 	}
 
 	return
@@ -117,13 +111,13 @@ func (service *branchService) DeleteBranch(ctx *gin.Context) (err error) {
 
 	_, err = service.GetBranch(ctx)
 	if err != nil {
-		err = errors.New("data branch tidak ditemukan")
+		err = errors.New("data branch not found")
 		return
 	}
 
 	err = service.branchRepository.DeleteBranch(id)
 	if err != nil {
-		err = errors.New("data branch gagal dihapus")
+		err = errors.New("data branch failed to be deleted")
 	}
 
 	return
@@ -134,7 +128,7 @@ func validateBranchReqAndConvertToBranch(ctx *gin.Context) (branchs models.Branc
 
 	err = ctx.ShouldBindJSON(&branchsRequest)
 	if err != nil {
-		err = errors.New("parameter yang dimasukkan salah")
+		err = errors.New("parameter is not valid")
 		return
 	}
 
@@ -152,9 +146,9 @@ func (service *branchService) GetBranchWithEmployees(ctx *gin.Context) (branch m
 
 	branch, err = service.branchRepository.GetBranchWithEmployees(id)
 	if branch.ID == 0 {
-		err = errors.New("data branch tidak ada")
+		err = errors.New("data branch not found")
 	} else if err != nil {
-		err = errors.New("data branch gagal diambil")
+		err = errors.New("data branch failed to be loaded")
 	}
 
 	return
@@ -165,9 +159,9 @@ func (service *branchService) GetBranchWithItems(ctx *gin.Context) (branch model
 
 	branch, err = service.branchRepository.GetBranchWithItems(id)
 	if branch.ID == 0 {
-		err = errors.New("data branch tidak ada")
+		err = errors.New("data branch not found")
 	} else if err != nil {
-		err = errors.New("data branch gagal diambil")
+		err = errors.New("data branch failed to be loaded")
 	}
 
 	return
@@ -178,13 +172,13 @@ func (service *branchService) GetTopBranch(ctx *gin.Context) (topBranch models.T
 
 	err = ctx.ShouldBindJSON(&topBranchRequest)
 	if err != nil {
-		err = errors.New("parameter yang dimasukkan salah")
+		err = errors.New("parameter is not valid")
 		return
 	}
 
 	topBranch, err = service.branchRepository.GetTopBranch(topBranchRequest.Month, topBranchRequest.Year)
 	if err != nil {
-		err = errors.New("data top branch gagal diambil")
+		err = errors.New("data top branch failed to be loaded")
 	}
 	return
 }

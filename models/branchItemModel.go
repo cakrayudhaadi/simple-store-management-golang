@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"simple-store-management/commons"
 	"time"
 )
 
@@ -16,22 +17,24 @@ type BranchItem struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-type AddBranchItemRequest struct {
+func (BranchItem) TableName() string {
+	return "branch_item"
+}
+
+type BranchItemRequest struct {
 	BranchID   int `json:"branch_id"`
 	ItemID     int `json:"item_id"`
 	AddedStock int `json:"added_stock"`
 }
 
-type RemoveBranchItemRequest struct {
-	BranchID     int `json:"branch_id"`
-	ItemID       int `json:"item_id"`
-	RemovedStock int `json:"removed_stock"`
+type BranchItemUpdateRequest struct {
+	AddedStock int `json:"added_stock"`
 }
 
-func (b *AddBranchItemRequest) Validate() (err error) {
-	if b.BranchID == 0 {
+func (b *BranchItemRequest) Validate() (err error) {
+	if commons.IsValueEmpty(b.BranchID) {
 		return errors.New("branch_id is required")
-	} else if b.ItemID == 0 {
+	} else if commons.IsValueEmpty(b.ItemID == 0) {
 		return errors.New("item_id is required")
 	} else if b.AddedStock < 0 {
 		return errors.New("added_stock must be greater than or equal to 0")
@@ -39,18 +42,14 @@ func (b *AddBranchItemRequest) Validate() (err error) {
 	return nil
 }
 
-func (b *RemoveBranchItemRequest) Validate() (err error) {
-	if b.BranchID == 0 {
-		return errors.New("branch_id is required")
-	} else if b.ItemID == 0 {
-		return errors.New("item_id is required")
-	} else if b.RemovedStock < 0 {
-		return errors.New("removed_stock must be greater than or equal to 0")
+func (b *BranchItemUpdateRequest) Validate() (err error) {
+	if b.AddedStock < 0 {
+		return errors.New("added_stock must be greater than or equal to 0")
 	}
 	return nil
 }
 
-func (b *AddBranchItemRequest) ConvertToBranchItem() BranchItem {
+func (b *BranchItemRequest) ConvertToBranchItem() BranchItem {
 	return BranchItem{
 		BranchID: b.BranchID,
 		ItemID:   b.ItemID,
@@ -58,10 +57,8 @@ func (b *AddBranchItemRequest) ConvertToBranchItem() BranchItem {
 	}
 }
 
-func (b *RemoveBranchItemRequest) ConvertToBranchItem() BranchItem {
+func (b *BranchItemUpdateRequest) ConvertToBranchItem() BranchItem {
 	return BranchItem{
-		BranchID: b.BranchID,
-		ItemID:   b.ItemID,
-		Stock:    b.RemovedStock,
+		Stock: b.AddedStock,
 	}
 }

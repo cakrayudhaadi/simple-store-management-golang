@@ -24,7 +24,9 @@ func branchItemInitiator(router *gin.Engine) {
 func CreateBranchItem(ctx *gin.Context) {
 	var (
 		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo, branchRepo, itemRepo)
 	)
 
 	err := branchItemSrv.CreateBranchItem(ctx)
@@ -33,13 +35,15 @@ func CreateBranchItem(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem successfully created")
 }
 
 func GetAllBranchItems(ctx *gin.Context) {
 	var (
 		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo, branchRepo, itemRepo)
 	)
 
 	branchItems, err := branchItemSrv.GetAllBranchItem(ctx)
@@ -48,13 +52,15 @@ func GetAllBranchItems(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branchItems berhasil diambil", branchItems)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branchItems successfully loaded", branchItems)
 }
 
 func GetBranchItem(ctx *gin.Context) {
 	var (
 		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo, branchRepo, itemRepo)
 	)
 
 	branchItem, err := branchItemSrv.GetBranchItem(ctx)
@@ -63,13 +69,15 @@ func GetBranchItem(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branchItem berhasil diambil", branchItem)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branchItem successfully loaded", branchItem)
 }
 
 func UpdateBranchItem(ctx *gin.Context) {
 	var (
 		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo, branchRepo, itemRepo)
 	)
 
 	err := branchItemSrv.UpdateBranchItem(ctx)
@@ -78,13 +86,15 @@ func UpdateBranchItem(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem successfully updated")
 }
 
 func DeleteBranchItem(ctx *gin.Context) {
 	var (
 		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
-		branchItemSrv  = services.NewBranchItemService(branchItemRepo)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		branchItemSrv  = services.NewBranchItemService(branchItemRepo, branchRepo, itemRepo)
 	)
 
 	err := branchItemSrv.DeleteBranchItem(ctx)
@@ -93,5 +103,5 @@ func DeleteBranchItem(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branchItem successfully deleted")
 }

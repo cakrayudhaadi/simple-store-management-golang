@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"simple-store-management/models"
 
 	"gorm.io/gorm"
@@ -32,6 +33,9 @@ func (repo *employeeRepository) GetAllEmployees() (employees []models.Employee, 
 
 func (repo *employeeRepository) GetEmployee(id int) (employee models.Employee, err error) {
 	err = repo.db.Where("id = ?", id).Find(&employee).Error
+	if employee.ID == 0 {
+		err = errors.New("employee not found")
+	}
 	return
 }
 

@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"simple-store-management/commons"
 	"time"
 )
 
@@ -15,6 +16,10 @@ type Item struct {
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedBy  string    `json:"updated_by"`
 	UpdatedAt  time.Time `json:"updated_at"`
+}
+
+func (Item) TableName() string {
+	return "item"
 }
 
 type ItemRequest struct {
@@ -32,9 +37,9 @@ type ItemsOnBranchResponse struct {
 }
 
 func (i *ItemRequest) Validate() error {
-	if i.Name == "" {
+	if commons.IsValueEmpty(i.Name) {
 		return errors.New("name is required")
-	} else if i.ItemTypeID == 0 {
+	} else if commons.IsValueEmpty(i.ItemTypeID) {
 		return errors.New("item_type_id is required")
 	} else if i.Price <= 0 {
 		return errors.New("price must be greater than 0")

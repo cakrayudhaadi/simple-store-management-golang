@@ -34,7 +34,7 @@ func CreateEmployee(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee successfully created")
 }
 
 func GetAllEmployees(ctx *gin.Context) {
@@ -49,7 +49,7 @@ func GetAllEmployees(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employees berhasil diambil", employees)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employees successfully loaded", employees)
 }
 
 func GetEmployee(ctx *gin.Context) {
@@ -64,7 +64,7 @@ func GetEmployee(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employee berhasil diambil", employee)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employee successfully loaded", employee)
 }
 
 func UpdateEmployee(ctx *gin.Context) {
@@ -79,7 +79,7 @@ func UpdateEmployee(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee successfully updated")
 }
 
 func DeleteEmployee(ctx *gin.Context) {
@@ -94,7 +94,7 @@ func DeleteEmployee(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee successfully deleted")
 }
 
 func GetTopEmployee(ctx *gin.Context) {
@@ -109,5 +109,5 @@ func GetTopEmployee(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employee berhasil diambil", employee)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employee successfully loaded", employee)
 }

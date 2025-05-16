@@ -18,8 +18,8 @@ func branchInitiator(router *gin.Engine) {
 		api.GET("/:id", GetBranch)
 		api.PUT("/:id", UpdateBranch)
 		api.DELETE("/:id", DeleteBranch)
-		api.GET("/employees", GetBranchWithEmployees)
-		api.GET("/items", GetBranchWithItems)
+		api.GET("/employees/:id", GetBranchWithEmployees)
+		api.GET("/items/:id", GetBranchWithItems)
 		api.GET("/top", GetTopBranch)
 	}
 }
@@ -36,7 +36,7 @@ func CreateBranch(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branch berhasil dibuat")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branch successfully created")
 }
 
 func GetAllBranchs(ctx *gin.Context) {
@@ -51,7 +51,7 @@ func GetAllBranchs(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branchs berhasil diambil", branchs)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branchs successfully loaded", branchs)
 }
 
 func GetBranch(ctx *gin.Context) {
@@ -66,7 +66,7 @@ func GetBranch(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch berhasil diambil", branch)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch successfully loaded", branch)
 }
 
 func UpdateBranch(ctx *gin.Context) {
@@ -81,7 +81,7 @@ func UpdateBranch(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branch berhasil diubah")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branch successfully updated")
 }
 
 func DeleteBranch(ctx *gin.Context) {
@@ -96,7 +96,7 @@ func DeleteBranch(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branch berhasil dihapus")
+	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data branch successfully deleted")
 }
 
 func GetBranchWithEmployees(ctx *gin.Context) {
@@ -111,7 +111,7 @@ func GetBranchWithEmployees(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch berhasil diambil", branch)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch successfully loaded", branch)
 }
 
 func GetBranchWithItems(ctx *gin.Context) {
@@ -126,7 +126,7 @@ func GetBranchWithItems(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch berhasil diambil", branch)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch successfully loaded", branch)
 }
 
 func GetTopBranch(ctx *gin.Context) {
@@ -141,5 +141,5 @@ func GetTopBranch(ctx *gin.Context) {
 		return
 	}
 
-	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch berhasil diambil", branch)
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data branch successfully loaded", branch)
 }

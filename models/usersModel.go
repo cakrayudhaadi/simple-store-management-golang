@@ -17,6 +17,10 @@ type Users struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+func (Users) TableName() string {
+	return "users"
+}
+
 type SignUpRequest struct {
 	Username       string `json:"username"`
 	Password       string `json:"password"`
@@ -34,26 +38,26 @@ type LoginResponse struct {
 
 func (s *SignUpRequest) Validate() (err error) {
 	if commons.IsValueEmpty(s.Username) {
-		return errors.New("username harus diisi")
+		return errors.New("username is required")
 	} else if commons.IsValueEmpty(s.Password) {
-		return errors.New("password harus diisi")
+		return errors.New("password is required")
 	} else if commons.IsValueEmpty(s.ReTypePassword) {
-		return errors.New("retype password harus diisi")
+		return errors.New("retype password is required")
 	} else if s.ReTypePassword != s.Password {
-		return errors.New("password dan retype password tidak sama")
+		return errors.New("password dan retype password are not match")
 	}
 	re := regexp.MustCompile(`^(.{8,})$`)
 	if !re.MatchString(s.Password) {
-		return errors.New("password harus mengandung minimal 8 karakter")
+		return errors.New("password must be at least 8 characters long")
 	}
 	return nil
 }
 
 func (l *LoginRequest) Validate() (err error) {
 	if commons.IsValueEmpty(l.Username) {
-		return errors.New("username harus diisi")
+		return errors.New("username is required")
 	} else if commons.IsValueEmpty(l.Password) {
-		return errors.New("password harus diisi")
+		return errors.New("password is required")
 	}
 	return
 }
@@ -61,7 +65,7 @@ func (l *LoginRequest) Validate() (err error) {
 func (s *SignUpRequest) ConvertToModelForSignUp() (user Users, err error) {
 	hashedPassword, err := commons.HashPassword(s.Password)
 	if err != nil {
-		err = errors.New("hashing password gagal")
+		err = errors.New("hashing password failed")
 		return
 	}
 	return Users{

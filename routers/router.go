@@ -11,6 +11,7 @@ func StartServer() {
 	itemInitiator(router)
 	itemTypeInitiator(router)
 	salesDataInitiator(router)
+	userInitiator(router)
 
 	router.Run(":8080")
 }

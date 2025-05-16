@@ -3,10 +3,8 @@ package services
 import (
 	"errors"
 	"simple-store-management/commons"
-	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -45,29 +43,29 @@ func (service *userService) Login(ctx *gin.Context) (result models.LoginResponse
 	}
 
 	if commons.IsValueEmpty(user.ID) {
-		err = errors.New("akun tidak valid")
+		err = errors.New("account is not valid")
 		return
 	}
 
 	matches := commons.CheckPassword(user.Password, userReq.Password)
 	if !matches {
-		err = errors.New("username atau password yang dimasukkan salah")
+		err = errors.New("combination of username and password is not valid")
 		return
 	}
 
-	jwtToken, err := middlewares.GenerateJwtToken()
-	if err != nil {
-		return
-	}
+	// jwtToken, err := middlewares.GenerateJwtToken()
+	// if err != nil {
+	// 	return
+	// }
 
-	middlewares.LoginRedis[jwtToken] = middlewares.UserLoginRedis{
-		UserId:    0,
-		Username:  user.Username,
-		LoginAt:   time.Now(),
-		ExpiredAt: time.Now().Add(time.Minute * 1),
-	}
+	// middlewares.LoginRedis[jwtToken] = middlewares.UserLoginRedis{
+	// 	UserId:    0,
+	// 	Username:  user.Username,
+	// 	LoginAt:   time.Now(),
+	// 	ExpiredAt: time.Now().Add(time.Minute * 1),
+	// }
 
-	result.Token = jwtToken
+	// result.Token = jwtToken
 
 	return
 }
@@ -77,7 +75,7 @@ func (service *userService) SignUp(ctx *gin.Context) (err error) {
 
 	err = ctx.ShouldBind(&userReq)
 	if err != nil {
-		err = errors.New("parameter yang dimasukkan salah")
+		err = errors.New("parameter is not valid")
 		return
 	}
 
@@ -93,7 +91,7 @@ func (service *userService) SignUp(ctx *gin.Context) (err error) {
 
 	err = service.userRepository.SignUp(user)
 	if err != nil {
-		err = errors.New("sign up gagal")
+		err = errors.New("sign up failed")
 		return
 	}
 

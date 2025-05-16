@@ -13,7 +13,7 @@ type BranchItemRepository interface {
 	CreateBranchItem(branchItem models.BranchItem) error
 	UpdateBranchItem(branchItem models.BranchItem) error
 	DeleteBranchItem(id int) error
-	GetBranchItemByBranchIdAndItemId(branchId int, itemId int) (branchItem models.BranchItem, err error)
+	GetBranchItemByBranchIDAndItemID(branchId int, itemId int) (branchItem models.BranchItem, err error)
 }
 
 type branchItemRepository struct {
@@ -33,6 +33,9 @@ func (repo *branchItemRepository) GetAllBranchItems() (branchItems []models.Bran
 
 func (repo *branchItemRepository) GetBranchItem(id int) (branchItem models.BranchItem, err error) {
 	err = repo.db.Where("id = ?", id).Find(&branchItem).Error
+	if branchItem.ID == 0 {
+		err = errors.New("branch item not found")
+	}
 	return
 }
 
@@ -51,13 +54,10 @@ func (repo *branchItemRepository) DeleteBranchItem(id int) (err error) {
 	return
 }
 
-func (repo *branchItemRepository) GetBranchItemByBranchIdAndItemId(branchId int, itemId int) (branchItem models.BranchItem, err error) {
+func (repo *branchItemRepository) GetBranchItemByBranchIDAndItemID(branchId int, itemId int) (branchItem models.BranchItem, err error) {
 	err = repo.db.Where("branch_id = ? AND item_id = ?", branchId, itemId).Find(&branchItem).Error
 	if err != nil {
 		return
-	}
-	if branchItem.ID == 0 {
-		err = errors.New("branch item not found")
 	}
 	return
 }

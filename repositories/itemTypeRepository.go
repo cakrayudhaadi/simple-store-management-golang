@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"simple-store-management/models"
 
 	"gorm.io/gorm"
@@ -31,6 +32,9 @@ func (repo *itemTypeRepository) GetAllItemTypes() (itemTypes []models.ItemType, 
 
 func (repo *itemTypeRepository) GetItemType(id int) (itemType models.ItemType, err error) {
 	err = repo.db.Where("id = ?", id).Find(&itemType).Error
+	if itemType.ID == 0 {
+		err = errors.New("item type not found")
+	}
 	return
 }
 

@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
 	"strconv"
@@ -37,16 +36,16 @@ func (service *itemTypeService) CreateItemType(ctx *gin.Context) (err error) {
 		return
 	}
 
-	loginName, err := middlewares.GetUsernameFromToken(ctx)
+	// loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	newItemType.CreatedBy = loginName
+	// newItemType.CreatedBy = loginName
 	newItemType.CreatedAt = time.Now()
 
 	err = service.itemTypeRepository.CreateItemType(newItemType)
 	if err != nil {
-		err = errors.New("data itemType gagal dibuat")
+		err = errors.New("data itemType failed to be created")
 	}
 
 	return
@@ -55,7 +54,7 @@ func (service *itemTypeService) CreateItemType(ctx *gin.Context) (err error) {
 func (service *itemTypeService) GetAllItemType(ctx *gin.Context) (itemTypes []models.ItemType, err error) {
 	itemTypes, err = service.itemTypeRepository.GetAllItemTypes()
 	if err != nil {
-		err = errors.New("data itemType gagal diambil")
+		err = errors.New("data itemType failed to be loaded")
 	} else if len(itemTypes) == 0 {
 		err = errors.New("data itemType kosong")
 	}
@@ -67,11 +66,6 @@ func (service *itemTypeService) GetItemType(ctx *gin.Context) (itemType models.I
 	id, _ := strconv.Atoi(ctx.Param("id"))
 
 	itemType, err = service.itemTypeRepository.GetItemType(id)
-	if itemType.ID == 0 {
-		err = errors.New("data itemType tidak ada")
-	} else if err != nil {
-		err = errors.New("data itemType gagal diambil")
-	}
 
 	return
 }
@@ -87,23 +81,23 @@ func (service *itemTypeService) UpdateItemType(ctx *gin.Context) (err error) {
 
 	oldItemType, err := service.GetItemType(ctx)
 	if err != nil {
-		err = errors.New("data itemType tidak ditemukan")
+		err = errors.New("data itemType not found")
 		return
 	}
 	newItemType.ID = id
 	newItemType.CreatedBy = oldItemType.CreatedBy
 	newItemType.CreatedAt = oldItemType.CreatedAt
 
-	loginName, err := middlewares.GetUsernameFromToken(ctx)
+	// loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	newItemType.UpdatedBy = loginName
+	// newItemType.UpdatedBy = loginName
 	newItemType.UpdatedAt = time.Now()
 
 	err = service.itemTypeRepository.UpdateItemType(newItemType)
 	if err != nil {
-		err = errors.New("data itemType gagal diubah")
+		err = errors.New("data itemType failed to be updated")
 	}
 
 	return
@@ -114,13 +108,13 @@ func (service *itemTypeService) DeleteItemType(ctx *gin.Context) (err error) {
 
 	_, err = service.GetItemType(ctx)
 	if err != nil {
-		err = errors.New("data itemType tidak ditemukan")
+		err = errors.New("data itemType not found")
 		return
 	}
 
 	err = service.itemTypeRepository.DeleteItemType(id)
 	if err != nil {
-		err = errors.New("data itemType gagal dihapus")
+		err = errors.New("data itemType failed to be deleted")
 	}
 
 	return
@@ -131,7 +125,7 @@ func validateItemTypeReqAndConvertToItemType(ctx *gin.Context) (itemTypes models
 
 	err = ctx.ShouldBindJSON(&itemTypesRequest)
 	if err != nil {
-		err = errors.New("parameter yang dimasukkan salah")
+		err = errors.New("parameter is not valid")
 		return
 	}
 

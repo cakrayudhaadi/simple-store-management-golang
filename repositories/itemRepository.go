@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"simple-store-management/models"
 
 	"gorm.io/gorm"
@@ -31,6 +32,9 @@ func (repo *itemRepository) GetAllItems() (items []models.Item, err error) {
 
 func (repo *itemRepository) GetItem(id int) (item models.Item, err error) {
 	err = repo.db.Where("id = ?", id).Find(&item).Error
+	if item.ID == 0 {
+		err = errors.New("item not found")
+	}
 	return
 }
 
