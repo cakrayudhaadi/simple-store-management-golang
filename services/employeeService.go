@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
 	"strconv"
@@ -37,11 +38,11 @@ func (service *employeeService) CreateEmployee(ctx *gin.Context) (err error) {
 		return
 	}
 
-	// loginName, err := middlewares.GetUsernameFromToken(ctx)
+	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	// newEmployee.CreatedBy = loginName
+	newEmployee.CreatedBy = loginName
 	newEmployee.CreatedAt = time.Now()
 
 	err = service.employeeRepository.CreateEmployee(newEmployee)
@@ -89,11 +90,11 @@ func (service *employeeService) UpdateEmployee(ctx *gin.Context) (err error) {
 	newEmployee.CreatedBy = oldEmployee.CreatedBy
 	newEmployee.CreatedAt = oldEmployee.CreatedAt
 
-	// loginName, err := middlewares.GetUsernameFromToken(ctx)
+	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	// newEmployee.UpdatedBy = loginName
+	newEmployee.UpdatedBy = loginName
 	newEmployee.UpdatedAt = time.Now()
 
 	err = service.employeeRepository.UpdateEmployee(newEmployee)

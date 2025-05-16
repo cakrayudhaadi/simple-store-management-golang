@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
 	"strconv"
@@ -76,6 +77,7 @@ func (service *salesDataService) CreateSalesData(ctx *gin.Context) (err error) {
 
 	if branchItem.ID == 0 {
 		err = errors.New("branch does not have this item")
+		return
 	}
 
 	if branchItem.Stock < newSalesData.Amount {
@@ -83,11 +85,11 @@ func (service *salesDataService) CreateSalesData(ctx *gin.Context) (err error) {
 		return
 	}
 
-	// loginName, err := middlewares.GetUsernameFromToken(ctx)
+	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	// newSalesData.CreatedBy = loginName
+	newSalesData.CreatedBy = loginName
 	newSalesData.CreatedAt = time.Now()
 	branchItem.Stock -= newSalesData.Amount
 
@@ -160,6 +162,7 @@ func (service *salesDataService) UpdateSalesData(ctx *gin.Context) (err error) {
 
 	if branchItem.ID == 0 {
 		err = errors.New("branch does not have this item")
+		return
 	}
 
 	if branchItem.Stock < newSalesData.Amount {
@@ -176,11 +179,11 @@ func (service *salesDataService) UpdateSalesData(ctx *gin.Context) (err error) {
 	newSalesData.CreatedBy = oldSalesData.CreatedBy
 	newSalesData.CreatedAt = oldSalesData.CreatedAt
 
-	// loginName, err := middlewares.GetUsernameFromToken(ctx)
+	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	// newSalesData.UpdatedBy = loginName
+	newSalesData.UpdatedBy = loginName
 	newSalesData.UpdatedAt = time.Now()
 
 	err = service.salesDataRepository.UpdateSalesData(newSalesData)

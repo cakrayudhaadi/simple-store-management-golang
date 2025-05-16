@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
 	"strconv"
@@ -40,11 +41,11 @@ func (service *branchService) CreateBranch(ctx *gin.Context) (err error) {
 		return
 	}
 
-	// loginName, err := middlewares.GetUsernameFromToken(ctx)
+	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	// newBranch.CreatedBy = loginName
+	newBranch.CreatedBy = loginName
 	newBranch.CreatedAt = time.Now()
 
 	err = service.branchRepository.CreateBranch(newBranch)
@@ -100,11 +101,11 @@ func (service *branchService) UpdateBranch(ctx *gin.Context) (err error) {
 	newBranch.CreatedBy = oldBranch.CreatedBy
 	newBranch.CreatedAt = oldBranch.CreatedAt
 
-	// loginName, err := middlewares.GetUsernameFromToken(ctx)
+	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	// newBranch.UpdatedBy = loginName
+	newBranch.UpdatedBy = loginName
 	newBranch.UpdatedAt = time.Now()
 
 	err = service.branchRepository.UpdateBranch(newBranch)

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"simple-store-management/commons"
 	"simple-store-management/databases/connection"
+	"simple-store-management/middlewares"
 	"simple-store-management/repositories"
 	"simple-store-management/services"
 
@@ -12,6 +13,8 @@ import (
 
 func employeeInitiator(router *gin.Engine) {
 	api := router.Group("/api/employee")
+	api.Use(middlewares.JwtMiddleware())
+	api.Use(middlewares.Logging())
 	{
 		api.POST("", CreateEmployee)
 		api.GET("", GetAllEmployees)

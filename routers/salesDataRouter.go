@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"simple-store-management/commons"
 	"simple-store-management/databases/connection"
+	"simple-store-management/middlewares"
 	"simple-store-management/repositories"
 	"simple-store-management/services"
 
@@ -12,6 +13,8 @@ import (
 
 func salesDataInitiator(router *gin.Engine) {
 	api := router.Group("/api/salesData")
+	api.Use(middlewares.JwtMiddleware())
+	api.Use(middlewares.Logging())
 	{
 		api.POST("", CreateSalesData)
 		api.GET("", GetAllSalesDatas)

@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
 	"strconv"
@@ -46,11 +47,11 @@ func (service *itemService) CreateItem(ctx *gin.Context) (err error) {
 		return
 	}
 
-	// loginName, err := middlewares.GetUsernameFromToken(ctx)
+	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	// newItem.CreatedBy = loginName
+	newItem.CreatedBy = loginName
 	newItem.CreatedAt = time.Now()
 
 	err = service.itemRepository.CreateItem(newItem)
@@ -105,11 +106,11 @@ func (service *itemService) UpdateItem(ctx *gin.Context) (err error) {
 	newItem.CreatedBy = oldItem.CreatedBy
 	newItem.CreatedAt = oldItem.CreatedAt
 
-	// loginName, err := middlewares.GetUsernameFromToken(ctx)
+	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	// newItem.UpdatedBy = loginName
+	newItem.UpdatedBy = loginName
 	newItem.UpdatedAt = time.Now()
 
 	err = service.itemRepository.UpdateItem(newItem)

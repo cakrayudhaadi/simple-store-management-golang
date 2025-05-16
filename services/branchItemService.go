@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
 	"strconv"
@@ -56,16 +57,17 @@ func (service *branchItemService) CreateBranchItem(ctx *gin.Context) (err error)
 		return
 	}
 
-	oldBranchItem, err := service.branchItemRepository.GetBranchItemByBranchIDAndItemID(newBranchItem.BranchID, newBranchItem.ItemID)
+	oldBranchItem, _ := service.branchItemRepository.GetBranchItemByBranchIDAndItemID(newBranchItem.BranchID, newBranchItem.ItemID)
 	if oldBranchItem.ID != 0 {
 		err = errors.New("data branch item already exists")
+		return
 	}
 
-	// loginName, err := middlewares.GetUsernameFromToken(ctx)
+	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	// newBranchItem.CreatedBy = loginName
+	newBranchItem.CreatedBy = loginName
 	newBranchItem.CreatedAt = time.Now()
 
 	err = service.branchItemRepository.CreateBranchItem(newBranchItem)
@@ -128,11 +130,11 @@ func (service *branchItemService) UpdateBranchItem(ctx *gin.Context) (err error)
 	newBranchItem.CreatedBy = oldBranchItem.CreatedBy
 	newBranchItem.CreatedAt = oldBranchItem.CreatedAt
 
-	// loginName, err := middlewares.GetUsernameFromToken(ctx)
+	loginName, err := middlewares.GetUsernameFromToken(ctx)
 	if err != nil {
 		return
 	}
-	// newBranchItem.UpdatedBy = loginName
+	newBranchItem.UpdatedBy = loginName
 	newBranchItem.UpdatedAt = time.Now()
 
 	err = service.branchItemRepository.UpdateBranchItem(newBranchItem)

@@ -3,8 +3,10 @@ package services
 import (
 	"errors"
 	"simple-store-management/commons"
+	"simple-store-management/middlewares"
 	"simple-store-management/models"
 	"simple-store-management/repositories"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -53,19 +55,19 @@ func (service *userService) Login(ctx *gin.Context) (result models.LoginResponse
 		return
 	}
 
-	// jwtToken, err := middlewares.GenerateJwtToken()
-	// if err != nil {
-	// 	return
-	// }
+	jwtToken, err := middlewares.GenerateJwtToken()
+	if err != nil {
+		return
+	}
 
-	// middlewares.LoginRedis[jwtToken] = middlewares.UserLoginRedis{
-	// 	UserId:    0,
-	// 	Username:  user.Username,
-	// 	LoginAt:   time.Now(),
-	// 	ExpiredAt: time.Now().Add(time.Minute * 1),
-	// }
+	middlewares.LoginRedis[jwtToken] = middlewares.UserLoginRedis{
+		UserId:    0,
+		Username:  user.Username,
+		LoginAt:   time.Now(),
+		ExpiredAt: time.Now().Add(time.Minute * 1),
+	}
 
-	// result.Token = jwtToken
+	result.Token = jwtToken
 
 	return
 }
