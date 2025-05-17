@@ -141,26 +141,35 @@ func validateEmployeeReqAndConvertToEmployee(ctx *gin.Context) (employees models
 }
 
 func (service *employeeService) GetTopEmployee(ctx *gin.Context) (topEmployee models.TopEmployeeResponse, err error) {
-	var topEmployeeRequest models.TopEmployeeRequest
-	topEmployeeRequest.BranchID, err = strconv.Atoi(ctx.Query("branch_id"))
+	var month, year, branchId int
+	branchId, err = strconv.Atoi(ctx.Param("branchId"))
 	if err != nil {
-		err = errors.New("parameter branch_id is required")
+		err = errors.New("parameter branchId is required")
 		return
 	}
-	topEmployeeRequest.Month, err = strconv.Atoi(ctx.Query("month"))
+	month, err = strconv.Atoi(ctx.Query("month"))
 	if err != nil {
-		err = errors.New("parameter month is required")
-		return
+		month = 0
 	}
-	topEmployeeRequest.Year, err = strconv.Atoi(ctx.Query("year"))
+	year, err = strconv.Atoi(ctx.Query("year"))
 	if err != nil {
-		err = errors.New("parameter year is required")
+		year = 0
+	}
+	if month != 0 && year == 0 {
+		err = errors.New("parameter year is required if month is provided")
 		return
 	}
 
-	topEmployee, err = service.employeeRepository.GetTopEmployee(topEmployeeRequest.Month, topEmployeeRequest.Year, topEmployeeRequest.BranchID)
+	topEmployee, err = service.employeeRepository.GetTopEmployee(month, year, branchId)
 	if err != nil {
 		err = errors.New("data top employee failed to be loaded")
+	}
+	if topEmployee.ID == 0 && year == 0 {
+		err = errors.New("no sales record found on this branch")
+	} else if topEmployee.ID == 0 && month == 0 {
+		err = errors.New("no sales record found for this year on this branch")
+	} else if topEmployee.ID == 0 {
+		err = errors.New("no sales record found for this month on this branch")
 	}
 	return
 }

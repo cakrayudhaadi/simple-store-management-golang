@@ -30,10 +30,17 @@ type ItemRequest struct {
 }
 
 type ItemsOnBranchResponse struct {
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	Price    int    `json:"price"`
+	Stock    int    `json:"stock"`
+	ItemType string `json:"item_type"`
+}
+
+type ItemOnItemTypeResponse struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
 	Price int    `json:"price"`
-	Stock int    `json:"stock"`
 }
 
 func (i *ItemRequest) Validate() error {

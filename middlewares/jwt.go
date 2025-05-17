@@ -63,7 +63,7 @@ func GetJwtTokenFromHeader(c *gin.Context) (tokenString string, err error) {
 }
 
 func GenerateJwtToken() (token string, err error) {
-	expirationTime := time.Now().Add(time.Hour)
+	expirationTime := time.Now().Add(time.Minute * 15)
 
 	claims := &jwt.RegisteredClaims{
 		Issuer:    "simple-store-management",

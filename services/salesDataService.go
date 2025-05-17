@@ -17,6 +17,8 @@ type SalesDataService interface {
 	GetSalesData(ctx *gin.Context) (salesData models.SalesData, err error)
 	UpdateSalesData(ctx *gin.Context) (err error)
 	DeleteSalesData(ctx *gin.Context) (err error)
+	GetSalesDataBranch(ctx *gin.Context) (salesData []models.SalesDataResponse, err error)
+	GetSalesDataEmployee(ctx *gin.Context) (salesData []models.SalesDataResponse, err error)
 }
 
 type salesDataService struct {
@@ -208,6 +210,74 @@ func (service *salesDataService) DeleteSalesData(ctx *gin.Context) (err error) {
 		err = errors.New("data salesData failed to be deleted")
 	}
 
+	return
+}
+
+func (service *salesDataService) GetSalesDataBranch(ctx *gin.Context) (salesData []models.SalesDataResponse, err error) {
+	var month, year, branchId int
+	branchId, err = strconv.Atoi(ctx.Param("branchId"))
+	if err != nil {
+		err = errors.New("parameter branchId is required")
+		return
+	}
+	month, err = strconv.Atoi(ctx.Query("month"))
+	if err != nil {
+		month = 0
+	}
+	year, err = strconv.Atoi(ctx.Query("year"))
+	if err != nil {
+		year = 0
+	}
+	if month != 0 && year == 0 {
+		err = errors.New("parameter year is required if month is provided")
+		return
+	}
+
+	salesData, err = service.salesDataRepository.GetSalesDataBranch(month, year, branchId)
+	if err != nil {
+		err = errors.New("data top branch failed to be loaded")
+	}
+	if len(salesData) == 0 && year == 0 {
+		err = errors.New("no sales record found by this branch")
+	} else if len(salesData) == 0 && month == 0 {
+		err = errors.New("no sales record found for this year by this branch")
+	} else if len(salesData) == 0 {
+		err = errors.New("no sales record found for this month by this branch")
+	}
+	return
+}
+
+func (service *salesDataService) GetSalesDataEmployee(ctx *gin.Context) (salesData []models.SalesDataResponse, err error) {
+	var month, year, employeeId int
+	employeeId, err = strconv.Atoi(ctx.Param("employeeId"))
+	if err != nil {
+		err = errors.New("parameter employeeId is required")
+		return
+	}
+	month, err = strconv.Atoi(ctx.Query("month"))
+	if err != nil {
+		month = 0
+	}
+	year, err = strconv.Atoi(ctx.Query("year"))
+	if err != nil {
+		year = 0
+	}
+	if month != 0 && year == 0 {
+		err = errors.New("parameter year is required if month is provided")
+		return
+	}
+
+	salesData, err = service.salesDataRepository.GetSalesDataEmployee(month, year, employeeId)
+	if err != nil {
+		err = errors.New("data top branch failed to be loaded")
+	}
+	if len(salesData) == 0 && year == 0 {
+		err = errors.New("no sales record found by this employee")
+	} else if len(salesData) == 0 && month == 0 {
+		err = errors.New("no sales record found for this year by this employee")
+	} else if len(salesData) == 0 {
+		err = errors.New("no sales record found for this month by this employee")
+	}
 	return
 }
 

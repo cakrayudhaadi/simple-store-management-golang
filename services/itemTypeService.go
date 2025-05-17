@@ -17,6 +17,7 @@ type ItemTypeService interface {
 	GetItemType(ctx *gin.Context) (itemType models.ItemType, err error)
 	UpdateItemType(ctx *gin.Context) (err error)
 	DeleteItemType(ctx *gin.Context) (err error)
+	GetItemsOfItemType(ctx *gin.Context) (itemType models.ItemsOfItemType, err error)
 }
 
 type itemTypeService struct {
@@ -116,6 +117,19 @@ func (service *itemTypeService) DeleteItemType(ctx *gin.Context) (err error) {
 	err = service.itemTypeRepository.DeleteItemType(id)
 	if err != nil {
 		err = errors.New("data itemType failed to be deleted")
+	}
+
+	return
+}
+
+func (service *itemTypeService) GetItemsOfItemType(ctx *gin.Context) (itemType models.ItemsOfItemType, err error) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	itemType, err = service.itemTypeRepository.GetItemsOfItemType(id)
+	if itemType.ID == 0 {
+		err = errors.New("data itemType not found")
+	} else if err != nil {
+		err = errors.New("data itemType failed to be loaded")
 	}
 
 	return

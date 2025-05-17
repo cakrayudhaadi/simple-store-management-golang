@@ -23,6 +23,17 @@ type ItemTypeRequest struct {
 	Type string `json:"type"`
 }
 
+type ItemTypeResponse struct {
+	ID   int    `json:"id"`
+	Type string `json:"type"`
+}
+
+type ItemsOfItemType struct {
+	ID    int                      `json:"id"`
+	Type  string                   `json:"type"`
+	Items []ItemOnItemTypeResponse `json:"items"`
+}
+
 func (i *ItemTypeRequest) Validate() error {
 	if commons.IsValueEmpty(i.Type) {
 		return errors.New("type is required")

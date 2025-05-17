@@ -21,6 +21,7 @@ func itemTypeInitiator(router *gin.Engine) {
 		api.GET("/:id", GetItemType)
 		api.PUT("/:id", UpdateItemType)
 		api.DELETE("/:id", DeleteItemType)
+		api.GET("/items/:id", GetItemsOfItemType)
 	}
 }
 
@@ -97,4 +98,19 @@ func DeleteItemType(ctx *gin.Context) {
 	}
 
 	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data itemType successfully deleted")
+}
+
+func GetItemsOfItemType(ctx *gin.Context) {
+	var (
+		itemTypeRepo = repositories.NewItemTypeRepository(connection.DBConnections)
+		itemTypeSrv  = services.NewItemTypeService(itemTypeRepo)
+	)
+
+	itemTypes, err := itemTypeSrv.GetItemsOfItemType(ctx)
+	if err != nil {
+		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data items successfully loaded", itemTypes)
 }

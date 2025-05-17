@@ -64,7 +64,7 @@ func (service *userService) Login(ctx *gin.Context) (result models.LoginResponse
 		UserId:    0,
 		Username:  user.Username,
 		LoginAt:   time.Now(),
-		ExpiredAt: time.Now().Add(time.Minute * 1),
+		ExpiredAt: time.Now().Add(time.Minute * 15),
 	}
 
 	result.Token = jwtToken

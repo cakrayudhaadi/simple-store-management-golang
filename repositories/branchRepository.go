@@ -98,8 +98,9 @@ func (repo *branchRepository) GetBranchWithItems(id int) (itemOfBranch models.It
 	itemOfBranch.Address = branch.Address
 
 	err = repo.db.Table("item").
-		Select("item.id AS id, item.name AS name, item.price AS price, branch_item.stock AS stock").
+		Select("item.id AS id, item.name AS name, item.price AS price, branch_item.stock AS stock, item_type.type AS item_type").
 		Joins("JOIN branch_item ON item.id = branch_item.item_id").
+		Joins("JOIN item_type ON item.item_type_id = item_type.id").
 		Where("branch_item.branch_id = ?", id).
 		Scan(&itemOfBranch.Items).Error
 	return
@@ -143,7 +144,16 @@ func (repo *branchRepository) GetBranchDetail(id int) (branchWithAll models.Bran
 func (repo *branchRepository) GetTopBranch(month, year int) (branch models.TopBranchResponse, err error) {
 	var timestampStart string
 	var timestampEnd string
-	if month == 0 {
+	if year == 0 && month == 0 {
+		err = repo.db.Table("branch").
+			Select("branch.id AS id, branch.name AS name, branch.address AS address, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.price) AS total_profit").
+			Joins("JOIN sales_data ON branch.id = sales_data.branch_id").
+			Joins("JOIN item ON sales_data.item_id = item.id").
+			Group("branch.id").
+			Order("total_profit DESC").
+			Limit(1).
+			Scan(&branch).Error
+	} else if month == 0 {
 		timestampStart = fmt.Sprintf("%d-01-01 00:00:00", year)
 		timestampEnd = fmt.Sprintf("%d-12-31 23:59:59", year)
 

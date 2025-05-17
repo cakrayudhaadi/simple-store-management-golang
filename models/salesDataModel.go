@@ -30,6 +30,14 @@ type SalesDataRequest struct {
 	SoldDate   string `json:"sold_date"`
 }
 
+type SalesDataResponse struct {
+	BranchName   string    `json:"branch_name"`
+	EmployeeName string    `json:"employee_name"`
+	ItemName     string    `json:"item_name"`
+	Amount       int       `json:"amount"`
+	SoldDate     time.Time `json:"sold_date"`
+}
+
 func (s *SalesDataRequest) Validate() error {
 	if commons.IsValueEmpty(s.ItemID) {
 		return errors.New("item_id is required")

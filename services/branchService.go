@@ -178,21 +178,30 @@ func (service *branchService) GetBranchWithItems(ctx *gin.Context) (branch model
 }
 
 func (service *branchService) GetTopBranch(ctx *gin.Context) (topBranch models.TopBranchResponse, err error) {
-	var topBranchRequest models.TopBranchRequest
-	topBranchRequest.Month, err = strconv.Atoi(ctx.Query("month"))
+	var month, year int
+	month, err = strconv.Atoi(ctx.Query("month"))
 	if err != nil {
-		err = errors.New("parameter month is required")
-		return
+		month = 0
 	}
-	topBranchRequest.Year, err = strconv.Atoi(ctx.Query("year"))
+	year, err = strconv.Atoi(ctx.Query("year"))
 	if err != nil {
-		err = errors.New("parameter year is required")
+		year = 0
+	}
+	if month != 0 && year == 0 {
+		err = errors.New("parameter year is required if month is provided")
 		return
 	}
 
-	topBranch, err = service.branchRepository.GetTopBranch(topBranchRequest.Month, topBranchRequest.Year)
+	topBranch, err = service.branchRepository.GetTopBranch(month, year)
 	if err != nil {
 		err = errors.New("data top branch failed to be loaded")
+	}
+	if topBranch.ID == 0 && year == 0 {
+		err = errors.New("no sales record found")
+	} else if topBranch.ID == 0 && month == 0 {
+		err = errors.New("no sales record found for this year")
+	} else if topBranch.ID == 0 {
+		err = errors.New("no sales record found for this month")
 	}
 	return
 }

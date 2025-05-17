@@ -21,6 +21,8 @@ func salesDataInitiator(router *gin.Engine) {
 		api.GET("/:id", GetSalesData)
 		api.PUT("/:id", UpdateSalesData)
 		api.DELETE("/:id", DeleteSalesData)
+		api.GET("/branch/:branchId", GetSalesDataBranch)
+		api.GET("/employee/:employeeId", GetSalesDataEmployee)
 	}
 }
 
@@ -117,4 +119,42 @@ func DeleteSalesData(ctx *gin.Context) {
 	}
 
 	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data salesData successfully deleted")
+}
+
+func GetSalesDataBranch(ctx *gin.Context) {
+	var (
+		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		employeeRepo   = repositories.NewEmployeeRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo, branchRepo, itemRepo, employeeRepo)
+	)
+
+	salesData, err := salesDataSrv.GetSalesDataBranch(ctx)
+	if err != nil {
+		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data salesData successfully loaded", salesData)
+}
+
+func GetSalesDataEmployee(ctx *gin.Context) {
+	var (
+		salesDataRepo  = repositories.NewSalesDataRepository(connection.DBConnections)
+		branchItemRepo = repositories.NewBranchItemRepository(connection.DBConnections)
+		branchRepo     = repositories.NewBranchRepository(connection.DBConnections)
+		itemRepo       = repositories.NewItemRepository(connection.DBConnections)
+		employeeRepo   = repositories.NewEmployeeRepository(connection.DBConnections)
+		salesDataSrv   = services.NewSalesDataService(salesDataRepo, branchItemRepo, branchRepo, itemRepo, employeeRepo)
+	)
+
+	salesData, err := salesDataSrv.GetSalesDataEmployee(ctx)
+	if err != nil {
+		commons.ResponseError(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data salesData successfully loaded", salesData)
 }

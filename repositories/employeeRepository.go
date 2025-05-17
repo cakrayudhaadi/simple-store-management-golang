@@ -59,7 +59,18 @@ func (repo *employeeRepository) DeleteEmployee(id int) (err error) {
 func (repo *employeeRepository) GetTopEmployee(month, year, branchID int) (employee models.TopEmployeeResponse, err error) {
 	var timestampStart string
 	var timestampEnd string
-	if month == 0 {
+	if year == 0 && month == 0 {
+		err = repo.db.Table("employee").
+			Select("employee.id AS id, employee.name AS name, branch.id AS branch_id, branch.name AS branch_name, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.price) AS total_profit").
+			Joins("JOIN branch ON employee.branch_id = branch.id").
+			Joins("JOIN sales_data ON employee.id = sales_data.employee_id").
+			Joins("JOIN item ON sales_data.item_id = item.id").
+			Where("employee.branch_id = ?", branchID).
+			Group("employee.id, branch.id").
+			Order("total_profit DESC").
+			Limit(1).
+			Scan(&employee).Error
+	} else if month == 0 {
 		timestampStart = fmt.Sprintf("%d-01-01 00:00:00", year)
 		timestampEnd = fmt.Sprintf("%d-12-31 23:59:59", year)
 

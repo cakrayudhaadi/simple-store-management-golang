@@ -13,6 +13,7 @@ type ItemTypeRepository interface {
 	CreateItemType(itemType models.ItemType) error
 	UpdateItemType(itemType models.ItemType) error
 	DeleteItemType(id int) error
+	GetItemsOfItemType(id int) (itemType models.ItemsOfItemType, err error)
 }
 
 type itemTypeRepository struct {
@@ -50,5 +51,26 @@ func (repo *itemTypeRepository) UpdateItemType(itemType models.ItemType) (err er
 
 func (repo *itemTypeRepository) DeleteItemType(id int) (err error) {
 	err = repo.db.Where("id = ?", id).Delete(&models.ItemType{}).Error
+	return
+}
+
+func (repo *itemTypeRepository) GetItemsOfItemType(id int) (ItemOfItemType models.ItemsOfItemType, err error) {
+	var itemType models.ItemTypeResponse
+	err = repo.db.Table("item_type").
+		Select("item_type.id AS id, item_type.type AS type").
+		Joins("JOIN item ON item_type.id = item.item_type_id").
+		Where("item_type.id = ?", id).
+		Scan(&itemType).Error
+	if err != nil {
+		return
+	}
+
+	ItemOfItemType.ID = itemType.ID
+	ItemOfItemType.Type = itemType.Type
+
+	err = repo.db.Table("item").
+		Select("item.id AS id, item.name AS name, item.price AS price").
+		Where("item.item_type_id = ?", id).
+		Scan(&ItemOfItemType.Items).Error
 	return
 }
