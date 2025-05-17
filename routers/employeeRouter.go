@@ -25,6 +25,17 @@ func employeeInitiator(router *gin.Engine) {
 	}
 }
 
+// Create Employee godoc
+// @Summary      Create Employee
+// @Description  create employee
+// @Tags         employee
+// @Accept       json
+// @Produce      json
+// @Param 		 employeeRequest body models.EmployeeRequest true "Employee Request"
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithoutData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/employee [post]
 func CreateEmployee(ctx *gin.Context) {
 	var (
 		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
@@ -40,6 +51,16 @@ func CreateEmployee(ctx *gin.Context) {
 	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee successfully created")
 }
 
+// Get All Employees godoc
+// @Summary      Get All Employees
+// @Description  get all employees
+// @Tags         employee
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/employee [get]
 func GetAllEmployees(ctx *gin.Context) {
 	var (
 		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
@@ -55,6 +76,17 @@ func GetAllEmployees(ctx *gin.Context) {
 	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employees successfully loaded", employees)
 }
 
+// Get Employee godoc
+// @Summary      Get Employee
+// @Description  get employee by id
+// @Tags         employee
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Employee ID"
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/employee/{id} [get]
 func GetEmployee(ctx *gin.Context) {
 	var (
 		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
@@ -70,6 +102,18 @@ func GetEmployee(ctx *gin.Context) {
 	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data employee successfully loaded", employee)
 }
 
+// Update Employee godoc
+// @Summary      Update Employee
+// @Description  update employee
+// @Tags         employee
+// @Accept       json
+// @Produce      json
+// @Param 		 employeeRequest body models.EmployeeRequest true "Employee Request"
+// @Param        id   path      int  true  "Employee ID"
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithoutData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/employee/{id} [put]
 func UpdateEmployee(ctx *gin.Context) {
 	var (
 		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
@@ -85,6 +129,17 @@ func UpdateEmployee(ctx *gin.Context) {
 	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee successfully updated")
 }
 
+// Delete Employee Item godoc
+// @Summary      Delete Employee
+// @Description  delete employee
+// @Tags         employee
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Employee ID"
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithoutData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/employee/{id} [delete]
 func DeleteEmployee(ctx *gin.Context) {
 	var (
 		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)
@@ -100,6 +155,19 @@ func DeleteEmployee(ctx *gin.Context) {
 	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data employee successfully deleted")
 }
 
+// Get Top Employee godoc
+// @Summary      Get Top Employee
+// @Description  get top employee
+// @Tags         employee
+// @Accept       json
+// @Produce      json
+// @Param        branchId   path      int  true  "Branch ID"
+// @Param        month   query      int  true  "Month"
+// @Param        year   query      int  true  "Year"
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/employee/top/{branchId} [get]
 func GetTopEmployee(ctx *gin.Context) {
 	var (
 		employeeRepo = repositories.NewEmployeeRepository(connection.DBConnections)

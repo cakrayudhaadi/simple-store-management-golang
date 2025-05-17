@@ -1,0 +1,1231 @@
+definitions:
+  commons.SwaggerApiResponseError:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        default: false
+        type: boolean
+    type: object
+  commons.SwaggerApiResponseSuccessWithData:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        default: true
+        type: boolean
+    type: object
+  commons.SwaggerApiResponseSuccessWithoutData:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        default: true
+        type: boolean
+    type: object
+  models.BranchItemRequest:
+    properties:
+      added_stock:
+        type: integer
+      branch_id:
+        type: integer
+      item_id:
+        type: integer
+    type: object
+  models.BranchItemUpdateRequest:
+    properties:
+      added_stock:
+        type: integer
+    type: object
+  models.BranchRequest:
+    properties:
+      address:
+        type: string
+      name:
+        type: string
+    type: object
+  models.EmployeeRequest:
+    properties:
+      branch_id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.ItemRequest:
+    properties:
+      item_type_id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: integer
+      profit:
+        type: integer
+    type: object
+  models.ItemTypeRequest:
+    properties:
+      type:
+        type: string
+    type: object
+  models.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.SalesDataRequest:
+    properties:
+      amount:
+        type: integer
+      employee_id:
+        type: integer
+      item_id:
+        type: integer
+      sold_date:
+        type: string
+    type: object
+  models.SignUpRequest:
+    properties:
+      password:
+        type: string
+      re_type_password:
+        type: string
+      username:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a simple store management server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Simple Store Management API
+  version: "1.0"
+paths:
+  /api/branch:
+    get:
+      consumes:
+      - application/json
+      description: get all branch
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get All Branch
+      tags:
+      - branch
+    post:
+      consumes:
+      - application/json
+      description: create a new branch
+      parameters:
+      - description: Branch Request
+        in: body
+        name: branchRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.BranchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Create Branch
+      tags:
+      - branch
+  /api/branch/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a branch
+      parameters:
+      - description: Branch ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Delete Branch
+      tags:
+      - branch
+    get:
+      consumes:
+      - application/json
+      description: get branch by id
+      parameters:
+      - description: Branch ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Branch
+      tags:
+      - branch
+    put:
+      consumes:
+      - application/json
+      description: update a branch
+      parameters:
+      - description: Branch Request
+        in: body
+        name: branchRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.BranchRequest'
+      - description: Branch ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Update Branch
+      tags:
+      - branch
+  /api/branch/detail/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get branch detail
+      parameters:
+      - description: Branch ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Branch Detail
+      tags:
+      - branch
+  /api/branch/employees/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get branch with employees
+      parameters:
+      - description: Branch ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Branch With Employees
+      tags:
+      - branch
+  /api/branch/items/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get branch with Iitems
+      parameters:
+      - description: Branch ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Branch With Items
+      tags:
+      - branch
+  /api/branch/top:
+    get:
+      consumes:
+      - application/json
+      description: get top branch
+      parameters:
+      - description: Month
+        in: query
+        name: month
+        required: true
+        type: integer
+      - description: Year
+        in: query
+        name: year
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Top Branch
+      tags:
+      - branch
+  /api/branchItem:
+    get:
+      consumes:
+      - application/json
+      description: get all branch items
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get All Branch Items
+      tags:
+      - branchItem
+    post:
+      consumes:
+      - application/json
+      description: create a new branch item
+      parameters:
+      - description: Branch Item Request
+        in: body
+        name: branchItemRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.BranchItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Create Branch Item
+      tags:
+      - branchItem
+  /api/branchItem/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a branch item
+      parameters:
+      - description: Branch Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Delete Branch Item
+      tags:
+      - branchItem
+    get:
+      consumes:
+      - application/json
+      description: get branch item by id
+      parameters:
+      - description: Branch Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Branch Item
+      tags:
+      - branchItem
+    put:
+      consumes:
+      - application/json
+      description: update a branch item
+      parameters:
+      - description: Branch Item Update Request
+        in: body
+        name: branchItemUpdateRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.BranchItemUpdateRequest'
+      - description: Branch Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Update Branch Item
+      tags:
+      - branchItem
+  /api/employee:
+    get:
+      consumes:
+      - application/json
+      description: get all employees
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get All Employees
+      tags:
+      - employee
+    post:
+      consumes:
+      - application/json
+      description: create employee
+      parameters:
+      - description: Employee Request
+        in: body
+        name: employeeRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.EmployeeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Create Employee
+      tags:
+      - employee
+  /api/employee/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete employee
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Delete Employee
+      tags:
+      - employee
+    get:
+      consumes:
+      - application/json
+      description: get employee by id
+      parameters:
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Employee
+      tags:
+      - employee
+    put:
+      consumes:
+      - application/json
+      description: update employee
+      parameters:
+      - description: Employee Request
+        in: body
+        name: employeeRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.EmployeeRequest'
+      - description: Employee ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Update Employee
+      tags:
+      - employee
+  /api/employee/top/{branchId}:
+    get:
+      consumes:
+      - application/json
+      description: get top employee
+      parameters:
+      - description: Branch ID
+        in: path
+        name: branchId
+        required: true
+        type: integer
+      - description: Month
+        in: query
+        name: month
+        required: true
+        type: integer
+      - description: Year
+        in: query
+        name: year
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Top Employee
+      tags:
+      - employee
+  /api/item:
+    get:
+      consumes:
+      - application/json
+      description: get all items
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get All Items
+      tags:
+      - item
+    post:
+      consumes:
+      - application/json
+      description: create a new item
+      parameters:
+      - description: Item Request
+        in: body
+        name: itemRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.ItemRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Create Item
+      tags:
+      - item
+  /api/item/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete item by id
+      parameters:
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Delete Item
+      tags:
+      - item
+    get:
+      consumes:
+      - application/json
+      description: get item by id
+      parameters:
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Item
+      tags:
+      - item
+    put:
+      consumes:
+      - application/json
+      description: update item by id
+      parameters:
+      - description: Item Request
+        in: body
+        name: itemRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.ItemRequest'
+      - description: Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Update Item
+      tags:
+      - item
+  /api/itemType:
+    get:
+      consumes:
+      - application/json
+      description: get all items types
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get All Item Types
+      tags:
+      - itemType
+    post:
+      consumes:
+      - application/json
+      description: create a new item type
+      parameters:
+      - description: Item Type Request
+        in: body
+        name: itemTypeRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.ItemTypeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Create Item Type
+      tags:
+      - itemType
+  /api/itemType/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete item type by id
+      parameters:
+      - description: Item Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Delete Item Type
+      tags:
+      - itemType
+    get:
+      consumes:
+      - application/json
+      description: get item type by id
+      parameters:
+      - description: Item Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Item Type
+      tags:
+      - itemType
+    put:
+      consumes:
+      - application/json
+      description: update item type by id
+      parameters:
+      - description: Item Type Request
+        in: body
+        name: itemTypeRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.ItemTypeRequest'
+      - description: Branch Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Update Item Type
+      tags:
+      - itemType
+  /api/itemType/items/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get items of item type
+      parameters:
+      - description: Item Type ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Items Of Item Type
+      tags:
+      - itemType
+  /api/salesData:
+    get:
+      consumes:
+      - application/json
+      description: get all sales datas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get All Sales Datas
+      tags:
+      - salesData
+    post:
+      consumes:
+      - application/json
+      description: create a new sales data
+      parameters:
+      - description: Sales Data Request
+        in: body
+        name: salesDataRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.SalesDataRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Create Sales Data
+      tags:
+      - salesData
+  /api/salesData/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: delete a sales data
+      parameters:
+      - description: Sales Data ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Delete Sales Data
+      tags:
+      - salesData
+    get:
+      consumes:
+      - application/json
+      description: get sales data by id
+      parameters:
+      - description: Sales Data ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Sales Data
+      tags:
+      - salesData
+    put:
+      consumes:
+      - application/json
+      description: update a sales data
+      parameters:
+      - description: Sales Data Request
+        in: body
+        name: salesDataRequest
+        required: true
+        schema:
+          $ref: '#/definitions/models.SalesDataRequest'
+      - description: Branch Item ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Update Sales Data
+      tags:
+      - salesData
+  /api/salesData/branch/{branchId}:
+    get:
+      consumes:
+      - application/json
+      description: get sales data by branch
+      parameters:
+      - description: Branch ID
+        in: path
+        name: branchId
+        required: true
+        type: integer
+      - description: Month
+        in: query
+        name: month
+        required: true
+        type: integer
+      - description: Year
+        in: query
+        name: year
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Sales Data Branch
+      tags:
+      - salesData
+  /api/salesData/employee/{employeeId}:
+    get:
+      consumes:
+      - application/json
+      description: get sales data by employee
+      parameters:
+      - description: Employee ID
+        in: path
+        name: employeeId
+        required: true
+        type: integer
+      - description: Month
+        in: query
+        name: month
+        required: true
+        type: integer
+      - description: Year
+        in: query
+        name: year
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      security:
+      - Bearer: []
+      summary: Get Sales Data Employee
+      tags:
+      - salesData
+  /api/users/login:
+    post:
+      consumes:
+      - application/json
+      description: login
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      summary: Login
+      tags:
+      - users
+  /api/users/signup:
+    post:
+      consumes:
+      - application/json
+      description: sign up
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.SignUpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseSuccessWithoutData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/commons.SwaggerApiResponseError'
+      summary: Sign Up
+      tags:
+      - users
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

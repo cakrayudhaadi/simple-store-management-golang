@@ -29,7 +29,7 @@ func ResponseError(ctx *gin.Context, statusCode int, message string) {
 	ctx.AbortWithStatusJSON(
 		statusCode,
 		ApiResponse{
-			Success: true,
+			Success: false,
 			Message: message,
 		},
 	)

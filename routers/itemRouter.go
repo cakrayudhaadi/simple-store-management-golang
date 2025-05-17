@@ -24,6 +24,17 @@ func itemInitiator(router *gin.Engine) {
 	}
 }
 
+// Create Item godoc
+// @Summary      Create Item
+// @Description  create a new item
+// @Tags         item
+// @Accept       json
+// @Produce      json
+// @Param 		 itemRequest body models.ItemRequest true "Item Request"
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithoutData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/item [post]
 func CreateItem(ctx *gin.Context) {
 	var (
 		itemRepo     = repositories.NewItemRepository(connection.DBConnections)
@@ -40,6 +51,16 @@ func CreateItem(ctx *gin.Context) {
 	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item successfully created")
 }
 
+// Get All Items godoc
+// @Summary      Get All Items
+// @Description  get all items
+// @Tags         item
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/item [get]
 func GetAllItems(ctx *gin.Context) {
 	var (
 		itemRepo     = repositories.NewItemRepository(connection.DBConnections)
@@ -56,6 +77,17 @@ func GetAllItems(ctx *gin.Context) {
 	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data items successfully loaded", items)
 }
 
+// Get Item godoc
+// @Summary      Get Item
+// @Description  get item by id
+// @Tags         item
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Item ID"
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/item/{id} [get]
 func GetItem(ctx *gin.Context) {
 	var (
 		itemRepo     = repositories.NewItemRepository(connection.DBConnections)
@@ -72,6 +104,18 @@ func GetItem(ctx *gin.Context) {
 	commons.ResponseSuccessWithData(ctx, http.StatusOK, "data item successfully loaded", item)
 }
 
+// Update Item godoc
+// @Summary      Update Item
+// @Description  update item by id
+// @Tags         item
+// @Accept       json
+// @Produce      json
+// @Param 		 itemRequest body models.ItemRequest true "Item Request"
+// @Param        id   path      int  true  "Item ID"
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithoutData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/item/{id} [put]
 func UpdateItem(ctx *gin.Context) {
 	var (
 		itemRepo     = repositories.NewItemRepository(connection.DBConnections)
@@ -88,6 +132,17 @@ func UpdateItem(ctx *gin.Context) {
 	commons.ResponseSuccessWithoutData(ctx, http.StatusOK, "data item successfully updated")
 }
 
+// Delete Item godoc
+// @Summary      Delete Item
+// @Description  delete item by id
+// @Tags         item
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Item ID"
+// @Success      200  {object}  commons.SwaggerApiResponseSuccessWithoutData
+// @Failure      400  {object}  commons.SwaggerApiResponseError
+// @Security  	 Bearer
+// @Router       /api/item/{id} [delete]
 func DeleteItem(ctx *gin.Context) {
 	var (
 		itemRepo     = repositories.NewItemRepository(connection.DBConnections)
