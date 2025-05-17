@@ -22,7 +22,7 @@ import (
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
-// @host      localhost:8080
+// @host      simple-store-management-golang-production.up.railway.app
 // @BasePath
 
 // @securityDefinitions.apiKey Bearer

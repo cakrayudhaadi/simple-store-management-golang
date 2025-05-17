@@ -15,7 +15,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "simple-store-management-golang-production.up.railway.app",
     "paths": {
         "/api/branch": {
             "get": {

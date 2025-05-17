@@ -9,11 +9,11 @@
         "db": {
             "postgres": {
                 "db_url": "postgresql://%s:%s@%s:%d/%s",
-                "db_host": "localhost",
-                "db_port": "5432",
                 "db_user": "postgres",
-                "db_password": "postgres",
-                "db_name": "sanbercode_golang",
+                "db_password": "AhjxLgmFpjlgyewEUNdlwhgccaWFFUCp",
+                "db_host": "ballast.proxy.rlwy.net",
+                "db_port": "15737",
+                "db_name": "railway",
                 "db_engine": "postgres"
             }
         }
