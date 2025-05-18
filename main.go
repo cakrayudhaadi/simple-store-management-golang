@@ -12,7 +12,7 @@ import (
 
 // @title           Simple Store Management API
 // @version         1.0
-// @description     This is a simple store management server.
+// @description     Simple Store Management is a REST API-based web application for managing stores that have branches in many places, record employees, items, and sales data. It can also see branches and employees who make the most sales within a month, year, or all time.
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   API Support

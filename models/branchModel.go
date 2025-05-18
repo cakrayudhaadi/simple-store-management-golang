@@ -51,10 +51,6 @@ type BranchDetailResponse struct {
 	Address   string                     `json:"address"`
 	Employees []EmployeeOnBranchResponse `json:"employees"`
 	Items     []ItemsOnBranchResponse    `json:"items"`
-	CreatedBy string                     `json:"created_by"`
-	CreatedAt time.Time                  `json:"created_at"`
-	UpdatedBy string                     `json:"updated_by"`
-	UpdatedAt time.Time                  `json:"updated_at"`
 }
 
 type TopBranchRequest struct {

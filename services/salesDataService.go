@@ -94,6 +94,8 @@ func (service *salesDataService) CreateSalesData(ctx *gin.Context) (err error) {
 	newSalesData.CreatedBy = loginName
 	newSalesData.CreatedAt = time.Now()
 	branchItem.Stock -= newSalesData.Amount
+	branchItem.UpdatedBy = loginName
+	branchItem.UpdatedAt = time.Now()
 
 	err = service.salesDataRepository.CreateSalesData(newSalesData)
 	if err != nil {

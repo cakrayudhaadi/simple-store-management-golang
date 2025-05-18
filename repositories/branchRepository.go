@@ -146,7 +146,7 @@ func (repo *branchRepository) GetTopBranch(month, year int) (branch models.TopBr
 	var timestampEnd string
 	if year == 0 && month == 0 {
 		err = repo.db.Table("branch").
-			Select("branch.id AS id, branch.name AS name, branch.address AS address, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.price) AS total_profit").
+			Select("branch.id AS id, branch.name AS name, branch.address AS address, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.profit) AS total_profit").
 			Joins("JOIN sales_data ON branch.id = sales_data.branch_id").
 			Joins("JOIN item ON sales_data.item_id = item.id").
 			Group("branch.id").
@@ -158,7 +158,7 @@ func (repo *branchRepository) GetTopBranch(month, year int) (branch models.TopBr
 		timestampEnd = fmt.Sprintf("%d-12-31 23:59:59", year)
 
 		err = repo.db.Table("branch").
-			Select("branch.id AS id, branch.name AS name, branch.address AS address, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.price) AS total_profit").
+			Select("branch.id AS id, branch.name AS name, branch.address AS address, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.profit) AS total_profit").
 			Joins("JOIN sales_data ON branch.id = sales_data.branch_id").
 			Joins("JOIN item ON sales_data.item_id = item.id").
 			Where("sales_data.sold_date >= ? AND sales_data.sold_date <= ?", timestampStart, timestampEnd).
@@ -174,7 +174,7 @@ func (repo *branchRepository) GetTopBranch(month, year int) (branch models.TopBr
 		timestampEnd = fmt.Sprintf("%d-%d-%d 23:59:59", year, month, lastOfMonth.Day())
 
 		err = repo.db.Table("branch").
-			Select("branch.id AS id, branch.name AS name, branch.address AS address, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.price) AS total_profit").
+			Select("branch.id AS id, branch.name AS name, branch.address AS address, SUM(sales_data.amount) AS total_sales, SUM(sales_data.amount * item.profit) AS total_profit").
 			Joins("JOIN sales_data ON branch.id = sales_data.branch_id").
 			Joins("JOIN item ON sales_data.item_id = item.id").
 			Where("sales_data.sold_date >= ? AND sales_data.sold_date <= ?", timestampStart, timestampEnd).
