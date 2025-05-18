@@ -106,7 +106,10 @@ info:
     email: support@swagger.io
     name: API Support
     url: http://www.swagger.io/support
-  description: This is a simple store management server.
+  description: Simple Store Management is a REST API-based web application for managing
+    stores that have branches in many places, record employees, items, and sales data.
+    It can also see branches and employees who make the most sales within a month,
+    year, or all time.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
